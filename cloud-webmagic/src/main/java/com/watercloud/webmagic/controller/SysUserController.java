@@ -13,13 +13,12 @@ import com.watercloud.webmagic.common.vo.Result;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysUserService;
 import com.watercloud.webmagic.vo.SysLoginVo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -45,6 +44,14 @@ public class SysUserController {
     @PostMapping("/login")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
     public Result<JSONObject> login(@RequestBody @Valid SysLoginVo sysLoginVo){
+        // 从SecurityUtils里边创建一个 subject
+        Subject subject = SecurityUtils.getSubject();
+        // 在认证提交前准备 token（令牌）
+        UsernamePasswordToken token = new UsernamePasswordToken(sysLoginVo.getUsername(), sysLoginVo.getPassword());
+        // 执行认证登陆
+        subject.login(token);
+
+
         String username = sysLoginVo.getUsername();
         String password = sysLoginVo.getPassword();
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
@@ -80,7 +87,28 @@ public class SysUserController {
     @PostMapping("/test1")
     public Result<String> test(@Valid SysLoginVo sysLoginVo){
         System.out.println(sysLoginVo.getUsername()+":"+sysLoginVo.getPassword());
-        Result<String> result = Result.OK("ojojojojojojo");
+        Result<String> result = Result.OK("test1");
+        return result;
+
+    }
+
+    @PostMapping("/test2")
+    public Result<String> tes2(@Valid SysLoginVo sysLoginVo){
+        System.out.println(sysLoginVo.getUsername()+":"+sysLoginVo.getPassword());
+        Result<String> result = Result.OK("tes2");
+        return result;
+
+    }
+
+    @GetMapping("/nologin")
+    public String nologin(){
+        Result<String> result = Result.OK("没有登录");
+        return "没有登录";
+
+    }
+    @GetMapping("/noRole")
+    public Result<String> noRole(){
+        Result<String> result = Result.OK("没有权限");
         return result;
 
     }

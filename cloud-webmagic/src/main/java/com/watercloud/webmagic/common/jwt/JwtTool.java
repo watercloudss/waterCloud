@@ -53,7 +53,6 @@ public class JwtTool {
 
     /**
      * 创建token,30min后过期
-     *
      * @param username 用户名
      * @return 加密的token
      */
@@ -68,6 +67,10 @@ public class JwtTool {
                 .sign(Algorithm.HMAC256(SECRET));//设置签名
     }
 
+    /**
+     * 校验加密的token
+     * @param token 加密的token
+     */
     public static Map<String,String> check(String token){
         Map<String,String> resultMap = new HashMap<>();
         try{
@@ -97,6 +100,14 @@ public class JwtTool {
         resultMap.put("msg","验证通过！");
         resultMap.put("isSuccess","1");
         return resultMap;
+    }
+
+    /**
+     * 解析token中负载部分的username
+     * @param token 加密的token
+     */
+    public static String getTokenUsername(String token){
+        return JWT.decode(token).getClaim("username").asString();
     }
 
 }
