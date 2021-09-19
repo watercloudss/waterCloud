@@ -72,8 +72,8 @@ public class SysUserController {
     }
 
     @PostMapping("/test")
-    @RequiresRoles({"user"})
-    @RequiresPermissions("user:add")
+    @RequiresRoles({"admin"})
+//    @RequiresPermissions("user:add")
     public Result<String> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
         iSysUserService.test(username,pass,gender);
