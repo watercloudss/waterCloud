@@ -16,5 +16,5 @@ import java.util.List;
  */
 @Mapper
 public interface SysRoleMapper extends BaseMapper<SysRole> {
-    public List<String> getUserRole(String username);
+    public List<String> getUserRole(Integer userId);
 }

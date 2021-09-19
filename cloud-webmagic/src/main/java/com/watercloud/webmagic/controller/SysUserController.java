@@ -76,6 +76,7 @@ public class SysUserController {
 //    @RequiresPermissions("user:add")
     public Result<String> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
+        System.out.println(SecurityUtils.getSubject().getPrincipal());
         iSysUserService.test(username,pass,gender);
         Result<String> result = Result.OK("ojojojojojojo");
         return result;

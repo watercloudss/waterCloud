@@ -58,7 +58,7 @@ public class CustomRealm extends AuthorizingRealm {
         if (null == sysUser||sysUser.getStatus().equals("2")) {
             throw new AuthenticationException("token不正确的！");
         }
-        return new SimpleAuthenticationInfo(token, token, "MyRealm");
+        return new SimpleAuthenticationInfo(sysUser, token, "MyRealm");
     }
 
     /**
@@ -70,12 +70,14 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("————权限认证————");
-        String username = JwtTool.getTokenUsername(principalCollection.toString());
+        System.out.println(principalCollection);
+        SysUser sysUser = (SysUser) principalCollection.getPrimaryPrincipal();
+        Integer userId = sysUser.getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
          //设置该用户拥有的角色
-        Set<String> roleSet = iSysRoleService.getUserRole(username);
+        Set<String> roleSet = iSysRoleService.getUserRole(userId);
         info.setRoles(roleSet);
-        Set<String> permissionSet = iSysPermissionService.getUserPermission(username);
+        Set<String> permissionSet = iSysPermissionService.getUserPermission(userId);
         info.setStringPermissions(permissionSet);
         return info;
     }

@@ -14,5 +14,5 @@ import java.util.Set;
  * @since 2021-09-19
  */
 public interface ISysRoleService extends IService<SysRole> {
-     Set<String> getUserRole(String username);
+     Set<String> getUserRole(Integer userId);
 }

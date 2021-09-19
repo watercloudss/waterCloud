@@ -19,7 +19,7 @@
         id, role_code, role_name, description, create_time, update_time, create_by, update_by
     </sql>
 
-    <select id="getUserRole" parameterType="String" resultType="String">
+    <select id="getUserRole" parameterType="Integer" resultType="String">
         SELECT
             role_code
         FROM
@@ -27,6 +27,6 @@
         INNER JOIN sys_user_role ur ON r.id = ur.role_id
         INNER JOIN sys_user u ON u.id = ur.user_id
         WHERE
-            u.username = #{username}
+            u.id = #{Integer}
     </select>
 </mapper>

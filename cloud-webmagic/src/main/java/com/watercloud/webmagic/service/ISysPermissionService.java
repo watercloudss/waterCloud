@@ -14,5 +14,5 @@ import java.util.Set;
  * @since 2021-09-19
  */
 public interface ISysPermissionService extends IService<SysPermission> {
-     public Set<String> getUserPermission(String username);
+     public Set<String> getUserPermission(Integer userId);
 }

@@ -25,8 +25,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRoleMapper sysRoleMapper;
 
     @Override
-    public Set<String> getUserRole(String username) {
-        List<String> roleList = sysRoleMapper.getUserRole(username);
+    public Set<String> getUserRole(Integer userId) {
+        List<String> roleList = sysRoleMapper.getUserRole(userId);
         Set<String> roleSet = new HashSet<>(roleList);
         return roleSet;
     }

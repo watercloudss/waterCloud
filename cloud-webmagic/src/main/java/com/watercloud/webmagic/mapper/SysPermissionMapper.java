@@ -16,5 +16,5 @@ import java.util.List;
  */
 @Mapper
 public interface SysPermissionMapper extends BaseMapper<SysPermission> {
-    public List<String> getUserPermission(String username);
+    public List<String> getUserPermission(Integer userId);
 }
