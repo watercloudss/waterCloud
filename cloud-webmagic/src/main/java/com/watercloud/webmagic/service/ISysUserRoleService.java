@@ -1,6 +1,6 @@
 package com.watercloud.webmagic.service;
 
-import com.watercloud.webmagic.entity.Usertest;
+import com.watercloud.webmagic.entity.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author lly
- * @since 2021-09-13
+ * @since 2021-09-19
  */
-public interface IUsertestService extends IService<Usertest> {
+public interface ISysUserRoleService extends IService<SysUserRole> {
 
 }

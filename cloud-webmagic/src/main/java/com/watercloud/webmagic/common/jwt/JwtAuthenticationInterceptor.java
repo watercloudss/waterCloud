@@ -34,12 +34,12 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
                 authCheckResultWriter(httpServletResponse,"需要验证！");
                 return false;
             }
-            Map<String,String> checkReult = JwtTool.check(token);
-            String isSuccess = checkReult.get("isSuccess");
-            if(isSuccess.equals("0")){
-                authCheckResultWriter(httpServletResponse,checkReult.get("msg"));
-                return false;
-            }
+//            Map<String,String> checkReult = JwtTool.check(token);
+//            String isSuccess = checkReult.get("isSuccess");
+//            if(isSuccess.equals("0")){
+//                authCheckResultWriter(httpServletResponse,checkReult.get("msg"));
+//                return false;
+//            }
         }
         return true;
     }

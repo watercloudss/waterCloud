@@ -1,6 +1,8 @@
 package com.watercloud.webmagic.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -18,17 +20,16 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SysRole implements Serializable {
+public class SysRolePermission implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String roleCode;
+    private Integer roleId;
 
-    private String roleName;
-
-    private String description;
+    private Integer permissionId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

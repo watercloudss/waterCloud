@@ -14,8 +14,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/**")
 //                .excludePathPatterns("/sys-user/login");
     }
-    @Bean
-    public JwtAuthenticationInterceptor jwtAuthenticationInterceptor() {
-        return new JwtAuthenticationInterceptor();
-    }
+//    @Bean
+//    public JwtAuthenticationInterceptor jwtAuthenticationInterceptor() {
+//        return new JwtAuthenticationInterceptor();
+//    }
 }

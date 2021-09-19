@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <p>
@@ -44,14 +45,6 @@ public class SysUserController {
     @PostMapping("/login")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
     public Result<JSONObject> login(@RequestBody @Valid SysLoginVo sysLoginVo){
-        // 从SecurityUtils里边创建一个 subject
-        Subject subject = SecurityUtils.getSubject();
-        // 在认证提交前准备 token（令牌）
-        UsernamePasswordToken token = new UsernamePasswordToken(sysLoginVo.getUsername(), sysLoginVo.getPassword());
-        // 执行认证登陆
-        subject.login(token);
-
-
         String username = sysLoginVo.getUsername();
         String password = sysLoginVo.getPassword();
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
@@ -76,7 +69,7 @@ public class SysUserController {
     }
 
     @PostMapping("/test")
-    @AuthCheckAnnotation
+//    @AuthCheckAnnotation
     public Result<String> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
         iSysUserService.test(username,pass,gender);
@@ -106,10 +99,34 @@ public class SysUserController {
         return "没有登录";
 
     }
+
     @GetMapping("/noRole")
     public Result<String> noRole(){
         Result<String> result = Result.OK("没有权限");
         return result;
 
+    }
+
+    @GetMapping("/logout")
+    public Result<String> logout() {
+        Subject subject = SecurityUtils.getSubject();
+        //注销
+        subject.logout();
+        Result<String> result = Result.OK("成功注销");
+        return result;
+    }
+    @GetMapping("/test3")
+    public Result<Object> test3(){
+        return Result.error(CommonConstant.SC_NO_AUTHZ,"123");
+    }
+
+    @RequestMapping(path = "/unauthorized/{message}")
+    public Result<Object> unauthorized(@PathVariable String message) throws UnsupportedEncodingException {
+        return Result.error(CommonConstant.SC_NO_AUTHZ,message);
+    }
+
+    @GetMapping("/403")
+    public Result<?> noauth()  {
+        return Result.error("没有权限，请联系管理员授权");
     }
 }

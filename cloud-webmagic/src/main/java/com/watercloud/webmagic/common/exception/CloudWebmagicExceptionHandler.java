@@ -1,19 +1,20 @@
 package com.watercloud.webmagic.common.exception;
 
-import com.watercloud.webmagic.common.aspect.annotation.AutoLogAnnotation;
 import com.watercloud.webmagic.common.util.CommonConstant;
 import com.watercloud.webmagic.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -99,6 +100,22 @@ public class CloudWebmagicExceptionHandler {
 		return Result.error(CommonConstant.SC_PARAM_VIOLATION,map.toString());
 	}
 
+	@ExceptionHandler(ShiroException.class)
+	public Result<?> handle401() {
+		return Result.error(CommonConstant.SC_NO_AUTHZ,"没有进行认证！");
+	}
+
+	@ExceptionHandler({UnauthorizedException.class, AuthorizationException.class})
+	public Result<?> handleAuthorizationException(AuthorizationException e){
+		log.error(e.getMessage(), e);
+		return Result.error(CommonConstant.SC_NO_AUTHZ,"没有权限，请联系管理员授权");
+	}
+
+	@ExceptionHandler(AuthenticationException.class)
+	public Result<?> handleAuthenticationException(AuthenticationException e){
+		log.error(e.getMessage(), e);
+		return Result.error(CommonConstant.SC_NO_AUTHZ,"没有权限，请联系管理员授权");
+	}
 
 	@ExceptionHandler(Exception.class)
 	public Result<?> handleException(Exception e){

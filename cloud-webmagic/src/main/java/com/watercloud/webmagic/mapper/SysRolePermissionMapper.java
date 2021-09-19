@@ -1,6 +1,6 @@
 package com.watercloud.webmagic.mapper;
 
-import com.watercloud.webmagic.entity.Usertest;
+import com.watercloud.webmagic.entity.SysRolePermission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,9 +10,9 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author lly
- * @since 2021-09-13
+ * @since 2021-09-19
  */
 @Mapper
-public interface UsertestMapper extends BaseMapper<Usertest> {
+public interface SysRolePermissionMapper extends BaseMapper<SysRolePermission> {
 
 }

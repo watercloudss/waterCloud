@@ -71,35 +71,35 @@ public class JwtTool {
      * 校验加密的token
      * @param token 加密的token
      */
-    public static Map<String,String> check(String token){
+    public static boolean check(String token){
         Map<String,String> resultMap = new HashMap<>();
-        try{
+//        try{
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).withIssuer(ISSUER).build();
         DecodedJWT decodedJWT = verifier.verify(token);
-        } catch (SignatureVerificationException e) {
-            log.error("无效签名！ 错误 ->", e);
-            resultMap.put("msg","无效签名！");
-            resultMap.put("isSuccess","0");
-            return resultMap;
-        } catch (TokenExpiredException e) {
-            log.error("token过期！ 错误 ->", e);
-            resultMap.put("msg","token过期！");
-            resultMap.put("isSuccess","0");
-            return resultMap;
-        } catch (AlgorithmMismatchException e) {
-            log.error("token算法不一致！ 错误 ->", e);
-            resultMap.put("msg","token算法不一致！");
-            resultMap.put("isSuccess","0");
-            return resultMap;
-        } catch (Exception e) {
-            log.error("token无效！ 错误 ->", e);
-            resultMap.put("msg","token无效！");
-            resultMap.put("isSuccess","0");
-            return resultMap;
-        }
+//        } catch (SignatureVerificationException e) {
+//            log.error("无效签名！ 错误 ->", e);
+//            resultMap.put("msg","无效签名！");
+//            resultMap.put("isSuccess","0");
+//            return resultMap;
+//        } catch (TokenExpiredException e) {
+//            log.error("token过期！ 错误 ->", e);
+//            resultMap.put("msg","token过期！");
+//            resultMap.put("isSuccess","0");
+//            return resultMap;
+//        } catch (AlgorithmMismatchException e) {
+//            log.error("token算法不一致！ 错误 ->", e);
+//            resultMap.put("msg","token算法不一致！");
+//            resultMap.put("isSuccess","0");
+//            return resultMap;
+//        } catch (Exception e) {
+//            log.error("token无效！ 错误 ->", e);
+//            resultMap.put("msg","token无效！");
+//            resultMap.put("isSuccess","0");
+//            return resultMap;
+//        }
         resultMap.put("msg","验证通过！");
         resultMap.put("isSuccess","1");
-        return resultMap;
+        return true;
     }
 
     /**
@@ -110,4 +110,12 @@ public class JwtTool {
         return JWT.decode(token).getClaim("username").asString();
     }
 
+    public static void main(String[] args) {
+        Date date = new Date(System.currentTimeMillis() + 1800000);
+        String token = JWT.create()
+                .withIssuedAt(new Date())//设置创建的时间
+                .withExpiresAt(date)//设置过期时间
+                .sign(Algorithm.HMAC256("01ea098224c7d0d2077c14b9a3a1ed16"));
+        System.out.println(JWT.require(Algorithm.HMAC256("01ea098224c7d0d2077c14b9a3a1ed16")).build().verify(token+1));
+    }
 }

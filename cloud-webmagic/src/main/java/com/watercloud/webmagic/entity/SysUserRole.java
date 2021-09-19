@@ -16,29 +16,30 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author lly
- * @since 2021-09-13
+ * @since 2021-09-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Usertest implements Serializable {
+public class SysUserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String name;
+    private Integer userId;
 
-    private Integer age;
-
-    @Version
-    private Integer version;
+    private Integer roleId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    private String createBy;
+
+    private String updateBy;
 
 
 }
