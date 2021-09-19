@@ -15,6 +15,9 @@ import com.watercloud.webmagic.service.ISysUserService;
 import com.watercloud.webmagic.vo.SysLoginVo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -69,7 +72,8 @@ public class SysUserController {
     }
 
     @PostMapping("/test")
-//    @AuthCheckAnnotation
+    @RequiresRoles({"user"})
+    @RequiresPermissions("user:add")
     public Result<String> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
         iSysUserService.test(username,pass,gender);

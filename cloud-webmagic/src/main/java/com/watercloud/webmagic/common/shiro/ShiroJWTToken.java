@@ -2,14 +2,6 @@ package com.watercloud.webmagic.common.shiro;
 
 import org.apache.shiro.authc.AuthenticationToken;
 
-/**
- * Created with IntelliJ IDEA
- *
- * @Author yuanhaoyue swithaoy@gmail.com
- * @Description token
- * @Date 2018-04-09
- * @Time 16:54
- */
 public class ShiroJWTToken implements AuthenticationToken {
     private String token;
 

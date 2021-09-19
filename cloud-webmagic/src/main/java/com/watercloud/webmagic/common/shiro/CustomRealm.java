@@ -2,10 +2,11 @@ package com.watercloud.webmagic.common.shiro;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.watercloud.webmagic.common.exception.CloudWebmagicException;
 import com.watercloud.webmagic.common.jwt.JwtTool;
 import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.entity.SysUser;
+import com.watercloud.webmagic.service.ISysPermissionService;
+import com.watercloud.webmagic.service.ISysRolePermissionService;
 import com.watercloud.webmagic.service.ISysRoleService;
 import com.watercloud.webmagic.service.ISysUserService;
 import org.apache.shiro.authc.*;
@@ -27,6 +28,8 @@ public class CustomRealm extends AuthorizingRealm {
     private ISysUserService iSysUserService;
     @Autowired
     private ISysRoleService iSysRoleService;
+    @Autowired
+    private ISysPermissionService iSysPermissionService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -69,15 +72,11 @@ public class CustomRealm extends AuthorizingRealm {
         System.out.println("————权限认证————");
         String username = JwtTool.getTokenUsername(principalCollection.toString());
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        //获得该用户角色
-        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id",1);
-        List<SysRole> sysRoleList = iSysRoleService.list(queryWrapper);
-        Set<String> set = new HashSet<>();
-        //需要将 role 封装到 Set 作为 info.setRoles() 的参数
-        sysRoleList.stream().forEach((e)->{set.add(e.getRoleCode());});
-        //设置该用户拥有的角色
-        info.setRoles(set);
+         //设置该用户拥有的角色
+        Set<String> roleSet = iSysRoleService.getUserRole(username);
+        info.setRoles(roleSet);
+        Set<String> permissionSet = iSysPermissionService.getUserPermission(username);
+        info.setStringPermissions(permissionSet);
         return info;
     }
 }

@@ -25,7 +25,7 @@ public class SysUser implements Serializable {
     /**
      * 主键id
      */
-    private String id;
+    private Integer id;
 
     /**
      * 登录账号

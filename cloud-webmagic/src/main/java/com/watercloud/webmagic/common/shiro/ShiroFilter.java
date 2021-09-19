@@ -1,23 +1,8 @@
 package com.watercloud.webmagic.common.shiro;
 
-import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.watercloud.webmagic.common.exception.CloudWebmagicException;
-import com.watercloud.webmagic.common.jwt.JwtTool;
-import com.watercloud.webmagic.common.util.CommonConstant;
-import com.watercloud.webmagic.common.vo.Result;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AccountException;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,9 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.Map;
 
 /*
 *
