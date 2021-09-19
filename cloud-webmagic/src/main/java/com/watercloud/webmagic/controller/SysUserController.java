@@ -8,6 +8,7 @@ import com.watercloud.webmagic.common.aspect.annotation.AutoLogAnnotation;
 import com.watercloud.webmagic.common.exception.CloudWebmagicException;
 import com.watercloud.webmagic.common.jwt.JwtTool;
 import com.watercloud.webmagic.common.util.CommonConstant;
+import com.watercloud.webmagic.common.util.RedisUtil;
 import com.watercloud.webmagic.common.validator.annotation.Gender;
 import com.watercloud.webmagic.common.vo.Result;
 import com.watercloud.webmagic.entity.SysUser;
@@ -20,12 +21,14 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -44,6 +47,10 @@ public class SysUserController {
     private ISysUserService iSysUserService;
     @Autowired
     private JwtTool jwtTool;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @PostMapping("/login")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
@@ -74,11 +81,15 @@ public class SysUserController {
     @PostMapping("/test")
     @RequiresRoles({"admin"})
 //    @RequiresPermissions("user:add")
-    public Result<String> test(String username,String pass, String gender){
+    public Result<SysUser> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
         System.out.println(SecurityUtils.getSubject().getPrincipal());
+        SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
+        redisTemplate.opsForValue().set(sysUser.getUsername(),sysUser);
+        SysUser sysUser1 = (SysUser) redisUtil.get(sysUser.getUsername());
+        System.out.println(sysUser1);
         iSysUserService.test(username,pass,gender);
-        Result<String> result = Result.OK("ojojojojojojo");
+        Result<SysUser> result = Result.OK(sysUser);
         return result;
     }
 
