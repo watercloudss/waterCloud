@@ -7,6 +7,7 @@
 - jwt
 - redis
 - mysql
+- druid
 
 后面计划整合的技术：
 - springcloud
