@@ -5,6 +5,8 @@ import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.mapper.SysUserMapper;
 import com.watercloud.webmagic.service.ISysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -22,6 +24,8 @@ import javax.validation.constraints.NotBlank;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
     @Override
     public void test(@NotBlank(message = "参数不能为空！") String username, @NotBlank(message = "不能为空！") String pass, @Gender String gender) {
+        SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        System.out.println("ser----"+sysUser.getUsername());
         System.out.println(username+":"+pass);
     }
 }

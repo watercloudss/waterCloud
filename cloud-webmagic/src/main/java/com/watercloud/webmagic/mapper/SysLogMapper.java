@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author lly
- * @since 2021-09-14
+ * @since 2021-09-21
  */
 @Mapper
 public interface SysLogMapper extends BaseMapper<SysLog> {

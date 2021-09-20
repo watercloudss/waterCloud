@@ -147,9 +147,13 @@ public class CodeGenerator {
         //配置自动填充字段
         TableFill createTime = new TableFill("create_time", FieldFill.INSERT);
         TableFill updateTime= new TableFill("update_time", FieldFill.INSERT_UPDATE);
+        TableFill createBy = new TableFill("create_by", FieldFill.INSERT);
+        TableFill updateBy= new TableFill("update_by", FieldFill.INSERT_UPDATE);
         List<TableFill> arr = new ArrayList();
         arr.add(createTime);
         arr.add(updateTime);
+        arr.add(createBy);
+        arr.add(updateBy);
         strategy.setTableFillList(arr);
 
         mpg.setStrategy(strategy);

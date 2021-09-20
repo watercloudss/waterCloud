@@ -92,16 +92,14 @@ public class SysUserController {
     }
 
     @PostMapping("/test")
-    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
+    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
     @RequiresRoles({"user"})
 //    @RequiresPermissions("user:add")
     public Result<SysUser> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
-        System.out.println(SecurityUtils.getSubject().getPrincipal());
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         redisTemplate.opsForValue().set(sysUser.getUsername(),sysUser);
         SysUser sysUser1 = (SysUser) redisUtil.get(sysUser.getUsername());
-        System.out.println(sysUser1);
         iSysUserService.test(username,pass,gender);
         Result<SysUser> result = Result.OK(sysUser);
         return result;
@@ -119,6 +117,7 @@ public class SysUserController {
     public Result<String> tes2(@Valid SysLoginVo sysLoginVo){
         System.out.println(sysLoginVo.getUsername()+":"+sysLoginVo.getPassword());
         Result<String> result = Result.OK("tes2");
+        System.out.println(SecurityUtils.getSubject().getPrincipal());
         return result;
 
     }

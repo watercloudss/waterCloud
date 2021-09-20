@@ -1,5 +1,6 @@
 package com.watercloud.webmagic.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -13,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author lly
- * @since 2021-09-14
+ * @since 2021-09-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -61,6 +62,7 @@ public class SysLog implements Serializable {
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
     /**
@@ -72,6 +74,7 @@ public class SysLog implements Serializable {
     /**
      * 更新人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
     /**
