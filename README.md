@@ -26,7 +26,7 @@
 - 发请求时接口都需要在header中设置“token”，没有@RequiresRoles注解的接口无需，“/sys_user/login”是获取token的接口也就是登录
 - mybatisplus自动生成代码默认设置的代码覆盖，生成代码时注意别把写好的代码覆盖掉了，CodeGenerator类运行起来输入表明就可以自动生成代码了
 - mybatisplus设置了自动填充，表中create_time、create_by、update_time、update_by（字段名一定要叫这个不然不会填充）字段都会自动填充，其中create_by、update_by字段只有在请求中存在token时才会自动填充否则填充null，
-- 在controller层使用@AutoLogAnnotation注解，会记录从日志sys_log，注意其他层使用会有一些问题，后面会完善
+- 在controller层使用@AutoLogAnnotation注解，会记录从日志sys_log，使用aop做的，注意其他层使用会有一些问题，后面会完善
 - 项目需要redis，所以没有redis的话接口会认证通过不了，出一些些奇奇怪怪的问题
 - SysUserController中有一些示例，可以参考
 
