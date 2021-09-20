@@ -12,6 +12,7 @@ import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysUserService;
 import com.watercloud.webmagic.vo.SysLoginVo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,8 +94,8 @@ public class SysUserController {
 
     @PostMapping("/test")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
-    @RequiresRoles({"user"})
-//    @RequiresPermissions("user:add")
+//    @RequiresRoles({"user"})
+    @RequiresPermissions("user:add")
     public Result<SysUser> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
