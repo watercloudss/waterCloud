@@ -1,8 +1,8 @@
-package com.watercloud.webmagic.common.shiro;
+package com.watercloud.webmagic.common.config.shiro;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.watercloud.webmagic.common.jwt.JwtTool;
+import com.watercloud.webmagic.common.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.watercloud.webmagic.service.ISysRoleService;

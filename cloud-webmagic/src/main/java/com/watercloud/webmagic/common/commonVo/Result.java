@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.vo;
+package com.watercloud.webmagic.common.commonVo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.watercloud.webmagic.common.util.CommonConstant;

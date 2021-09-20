@@ -1,9 +1,9 @@
-package com.watercloud.webmagic.common.jwt;
+package com.watercloud.webmagic.common.config.shiro.jwt;
 
 import com.alibaba.fastjson.JSON;
 import com.watercloud.webmagic.common.aspect.annotation.AuthCheckAnnotation;
 import com.watercloud.webmagic.common.util.CommonConstant;
-import com.watercloud.webmagic.common.vo.Result;
+import com.watercloud.webmagic.common.commonVo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 @Slf4j
 public class JwtAuthenticationInterceptor implements HandlerInterceptor {

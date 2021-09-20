@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.config;
+package com.watercloud.webmagic.common.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;

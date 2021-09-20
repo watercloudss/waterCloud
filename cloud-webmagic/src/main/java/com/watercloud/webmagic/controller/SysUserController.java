@@ -3,21 +3,15 @@ package com.watercloud.webmagic.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.watercloud.webmagic.common.aspect.annotation.AuthCheckAnnotation;
 import com.watercloud.webmagic.common.aspect.annotation.AutoLogAnnotation;
-import com.watercloud.webmagic.common.exception.CloudWebmagicException;
-import com.watercloud.webmagic.common.jwt.JwtTool;
+import com.watercloud.webmagic.common.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.common.util.CommonConstant;
 import com.watercloud.webmagic.common.util.RedisUtil;
-import com.watercloud.webmagic.common.validator.annotation.Gender;
-import com.watercloud.webmagic.common.vo.Result;
+import com.watercloud.webmagic.common.commonVo.Result;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysUserService;
 import com.watercloud.webmagic.vo.SysLoginVo;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.Logical;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +20,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 /**

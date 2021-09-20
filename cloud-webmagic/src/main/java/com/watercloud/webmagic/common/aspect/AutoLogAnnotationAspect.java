@@ -6,7 +6,7 @@ import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.watercloud.webmagic.common.aspect.annotation.AutoLogAnnotation;
 import com.watercloud.webmagic.common.util.CommonConstant;
 import com.watercloud.webmagic.common.util.IPUtils;
-import com.watercloud.webmagic.common.vo.Result;
+import com.watercloud.webmagic.common.commonVo.Result;
 import com.watercloud.webmagic.entity.SysLog;
 import com.watercloud.webmagic.service.ISysLogService;
 import org.aspectj.lang.JoinPoint;

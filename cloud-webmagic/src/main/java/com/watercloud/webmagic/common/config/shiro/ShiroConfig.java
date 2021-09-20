@@ -1,7 +1,5 @@
-package com.watercloud.webmagic.config;
+package com.watercloud.webmagic.common.config.shiro;
 
-import com.watercloud.webmagic.common.shiro.ShiroFilter;
-import com.watercloud.webmagic.common.shiro.CustomRealm;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -11,22 +9,16 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.IRedisManager;
 import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisClusterManager;
 import org.crazycake.shiro.RedisManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.util.StringUtils;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Configuration
 public class ShiroConfig {
@@ -115,7 +107,7 @@ public class ShiroConfig {
         //redis中针对不同用户缓存(此处的id需要对应user实体中的id字段,用于唯一标识)
         redisCacheManager.setPrincipalIdFieldName("id");
         //用户权限信息缓存时间
-        redisCacheManager.setExpire(200000);
+        redisCacheManager.setExpire(28800);
         return redisCacheManager;
     }
 
