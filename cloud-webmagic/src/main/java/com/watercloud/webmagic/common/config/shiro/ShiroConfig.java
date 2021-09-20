@@ -1,5 +1,6 @@
 package com.watercloud.webmagic.common.config.shiro;
 
+import cn.hutool.core.util.StrUtil;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -11,22 +12,19 @@ import org.crazycake.shiro.IRedisManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
-import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
-    @Resource
-    LettuceConnectionFactory lettuceConnectionFactory;
-    /**
-     * 先走 filter ，然后 filter 如果检测到请求头存在 token，则用 token 去 login，走 Realm 去验证
-     */
+    @Value("${ShiroConfig.AnonUrls}")
+    private String AnonUrls;
+
     @Bean
     public ShiroFilterFactoryBean factory(SecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
@@ -40,6 +38,12 @@ public class ShiroConfig {
         factoryBean.setUnauthorizedUrl("/sys-user/403");
 //        factoryBean.setLoginUrl("/sys-user/403");
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
+        if(StrUtil.isNotBlank(AnonUrls)){
+            String[] anonUrls = AnonUrls.split(",");
+            for(String url : anonUrls){
+                filterRuleMap.put(url,"anon");
+            }
+        }
         // 所有请求通过我们自己的JWT Filter
         filterRuleMap.put("/sys-user/login", "anon");
         filterRuleMap.put("/sys-user/logout", "anon");
@@ -92,7 +96,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+    public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
 

@@ -20,8 +20,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sql.DataSource;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * <p>
@@ -35,6 +38,8 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("/sys-user")
 @Validated
 public class SysUserController {
+    @Value("${JWTConfig.EXPIRE_TIME}")
+    private long EXPIRE_TIME;
     @Autowired
     private ISysUserService iSysUserService;
     @Autowired
@@ -43,8 +48,8 @@ public class SysUserController {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private RedisUtil redisUtil;
-    @Value("${JWTConfig.EXPIRE_TIME}")
-    private long EXPIRE_TIME;
+    @Autowired
+    DataSource dataSource;
 
     @PostMapping("/login")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
@@ -75,6 +80,7 @@ public class SysUserController {
     }
 
     @PostMapping("/test")
+    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
     @RequiresRoles({"user"})
 //    @RequiresPermissions("user:add")
     public Result<SysUser> test(String username,String pass, String gender){
@@ -105,20 +111,6 @@ public class SysUserController {
 
     }
 
-    @GetMapping("/nologin")
-    public String nologin(){
-        Result<String> result = Result.OK("没有登录");
-        return "没有登录";
-
-    }
-
-    @GetMapping("/noRole")
-    public Result<String> noRole(){
-        Result<String> result = Result.OK("没有权限");
-        return result;
-
-    }
-
     @GetMapping("/logout")
     public Result<String> logout() {
         Subject subject = SecurityUtils.getSubject();
@@ -132,13 +124,8 @@ public class SysUserController {
         return Result.error(CommonConstant.SC_NO_AUTHZ,"123");
     }
 
-    @RequestMapping(path = "/unauthorized/{message}")
-    public Result<Object> unauthorized(@PathVariable String message) throws UnsupportedEncodingException {
-        return Result.error(CommonConstant.SC_NO_AUTHZ,message);
-    }
-
     @GetMapping("/403")
-    public Result<?> noauth()  {
+    public Result<?> noauth() {
         return Result.error("没有认证，请登录认证!");
     }
 }
