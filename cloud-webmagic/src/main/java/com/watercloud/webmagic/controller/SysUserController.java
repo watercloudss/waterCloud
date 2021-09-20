@@ -79,7 +79,7 @@ public class SysUserController {
     }
 
     @PostMapping("/test")
-    @RequiresRoles({"admin"})
+    @RequiresRoles({"user"})
 //    @RequiresPermissions("user:add")
     public Result<SysUser> test(String username,String pass, String gender){
         System.out.println(username+":"+pass+":"+gender);
@@ -143,6 +143,6 @@ public class SysUserController {
 
     @GetMapping("/403")
     public Result<?> noauth()  {
-        return Result.error("没有权限，请联系管理员授权");
+        return Result.error("没有认证，请登录认证!");
     }
 }

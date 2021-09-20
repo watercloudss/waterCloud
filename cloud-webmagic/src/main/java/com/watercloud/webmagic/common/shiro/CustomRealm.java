@@ -3,12 +3,11 @@ package com.watercloud.webmagic.common.shiro;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.watercloud.webmagic.common.jwt.JwtTool;
-import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
-import com.watercloud.webmagic.service.ISysRolePermissionService;
 import com.watercloud.webmagic.service.ISysRoleService;
 import com.watercloud.webmagic.service.ISysUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -17,11 +16,9 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 @Component
 public class CustomRealm extends AuthorizingRealm {
     @Autowired
@@ -44,7 +41,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        System.out.println("————身份认证方法————");
+        log.info("————身份认证方法————");
         String token = (String)authenticationToken.getCredentials();
         JwtTool.check(token);
         String username = JwtTool.getTokenUsername(token);
@@ -69,8 +66,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("————权限认证————");
-        System.out.println(principalCollection);
+        log.info("————权限认证————");
         SysUser sysUser = (SysUser) principalCollection.getPrimaryPrincipal();
         Integer userId = sysUser.getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();

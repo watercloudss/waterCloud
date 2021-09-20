@@ -108,7 +108,7 @@ public class CloudWebmagicExceptionHandler {
 	@ExceptionHandler({UnauthorizedException.class, AuthorizationException.class})
 	public Result<?> handleAuthorizationException(AuthorizationException e){
 		log.error(e.getMessage(), e);
-		return Result.error(CommonConstant.SC_NO_AUTHZ,"没有权限，请联系管理员授权");
+		return Result.error(CommonConstant.SC_NO_AUTHZ,"没有权限，请联系管理员授权!");
 	}
 
 	@ExceptionHandler(AuthenticationException.class)
