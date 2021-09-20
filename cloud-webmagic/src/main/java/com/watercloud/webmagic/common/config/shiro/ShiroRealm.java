@@ -22,7 +22,7 @@ import java.util.Set;
 
 @Slf4j
 @Component
-public class CustomRealm extends AuthorizingRealm {
+public class ShiroRealm extends AuthorizingRealm {
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
@@ -107,4 +107,5 @@ public class CustomRealm extends AuthorizingRealm {
         info.setStringPermissions(permissionSet);
         return info;
     }
+
 }
