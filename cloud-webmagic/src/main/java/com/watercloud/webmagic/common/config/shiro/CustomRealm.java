@@ -3,6 +3,7 @@ package com.watercloud.webmagic.common.config.shiro;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.watercloud.webmagic.common.config.shiro.jwt.JwtTool;
+import com.watercloud.webmagic.common.util.RedisUtil;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.watercloud.webmagic.service.ISysRoleService;
@@ -14,6 +15,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -22,11 +24,15 @@ import java.util.Set;
 @Component
 public class CustomRealm extends AuthorizingRealm {
     @Autowired
+    private RedisUtil redisUtil;
+    @Autowired
     private ISysUserService iSysUserService;
     @Autowired
     private ISysRoleService iSysRoleService;
     @Autowired
     private ISysPermissionService iSysPermissionService;
+    @Value("${JWTConfig.EXPIRE_TIME}")
+    private long EXPIRE_TIME;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -43,8 +49,10 @@ public class CustomRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         log.info("————身份认证方法————");
         String token = (String)authenticationToken.getCredentials();
-        JwtTool.check(token);
         String username = JwtTool.getTokenUsername(token);
+        if(!refreshRedisToken(token,username)){
+            throw new AuthenticationException("认证过期，请登录认证!");
+        }
         if(StrUtil.isBlank(username)){
             throw new AuthenticationException("token有错误！");
         }
@@ -56,6 +64,28 @@ public class CustomRealm extends AuthorizingRealm {
             throw new AuthenticationException("token不正确的！");
         }
         return new SimpleAuthenticationInfo(sysUser, token, "MyRealm");
+    }
+
+    /*
+    * 这个方法主要用来做保证用户操作时不会掉线
+    * 登录时，将token存到redis中，k,v都为token，
+    * 其他接口带着token访问时，使用jwt校验v，校验通过的话，重新设置v，
+    * 这样只要用户半小时内发请求，登录时k为token的value就永远不会过期，
+    * 若用户登录或调用某个接口后，半小时都没有再发任何请求，这时k为token在redis中就会过期，就需要重新认证
+    * */
+    private boolean refreshRedisToken(String token,String username){
+        String tokenValue = (String) redisUtil.get(token);
+        if(StrUtil.isNotBlank(tokenValue)){
+            if(JwtTool.check(tokenValue)){
+                String  newTokenValue = JwtTool.sign(username);
+                redisUtil.set(token,newTokenValue,EXPIRE_TIME/1000);
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 
     /**

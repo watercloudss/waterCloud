@@ -15,6 +15,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,8 @@ public class SysUserController {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private RedisUtil redisUtil;
+    @Value("${JWTConfig.EXPIRE_TIME}")
+    private long EXPIRE_TIME;
 
     @PostMapping("/login")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
@@ -57,8 +60,10 @@ public class SysUserController {
             result.setCode(CommonConstant.SC_NO_AUTHZ);
         }else{
             if(password.equals( sysUser.getPassword())){
+                String token = jwtTool.sign(username);
+                redisUtil.set(token,token,EXPIRE_TIME/1000);
                 JSONObject res = new JSONObject();
-                res.put("token", jwtTool.sign(username));
+                res.put("token", token);
                 result.setCode(CommonConstant.SC_OK_200);
                 result.setResult(res);
             }else{
