@@ -72,6 +72,7 @@ public class ShiroRealm extends AuthorizingRealm {
     * 其他接口带着token访问时，使用jwt校验v，校验通过的话，重新设置v，
     * 这样只要用户半小时内发请求，登录时k为token的value就永远不会过期，
     * 若用户登录或调用某个接口后，半小时都没有再发任何请求，这时k为token在redis中就会过期，就需要重新认证
+    * 即使两个请求并发，value都是能校验通过的
     * */
     private boolean refreshRedisToken(String token,String username){
         String tokenValue = (String) redisUtil.get(token);
