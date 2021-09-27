@@ -1,14 +1,13 @@
 package com.watercloud.webmagic.common.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,13 +15,37 @@ import java.util.concurrent.TimeUnit;
  * @Author Scott
  *
  */
+@Slf4j
 @Component
 public class RedisUtil {
 
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
-	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
+
+	private static final String UNLOCK_LUA =
+			"if redis.call('get',KEYS[1]) == ARGV[1] "
+					+ "then "
+					+ "    return redis.call('del',KEYS[1]) "
+					+ "else "
+					+ "    return 0 "
+					+ "end ";
+
+	/**
+	 * 释放分布式锁资源
+	 *
+	 * @param redisKey key
+	 * @param value    value
+	 * @return Boolean
+	 */
+	 public boolean releaseLock(String redisKey,String value) {
+		try {
+			DefaultRedisScript<Boolean> redisScript = new DefaultRedisScript<>(UNLOCK_LUA,Boolean.class);
+			return redisTemplate.execute(redisScript,Collections.singletonList(redisKey),value);
+		} catch (Exception e) {
+			log.info("release lock fail because of ", e);
+		}
+		return false;
+	}
 
 	/**
 	 * 指定缓存失效时间
@@ -610,5 +633,13 @@ public class RedisUtil {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void main(String[] args) {
+		String a = "123";
+		System.out.println(a.hashCode());
+		Map<String,String> map = new HashMap<>();
+		Set<String> set = new HashSet<>();
+		RedisUtil redisUtil = new RedisUtil();
 	}
 }

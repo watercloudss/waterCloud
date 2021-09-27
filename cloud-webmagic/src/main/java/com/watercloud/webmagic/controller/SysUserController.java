@@ -24,9 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * <p>
@@ -110,6 +107,7 @@ public class SysUserController {
     public Result<String> test(@Valid SysLoginVo sysLoginVo){
         System.out.println(sysLoginVo.getUsername()+":"+sysLoginVo.getPassword());
         Result<String> result = Result.OK("test1");
+        redisUtil.set("redislock","3213131",130);
         return result;
 
     }
@@ -118,9 +116,10 @@ public class SysUserController {
     public Result<String> tes2(@Valid SysLoginVo sysLoginVo){
         System.out.println(sysLoginVo.getUsername()+":"+sysLoginVo.getPassword());
         Result<String> result = Result.OK("tes2");
+        System.out.println(redisUtil.getExpire("redislock"));
+        System.out.println( redisUtil.releaseLock("redislock","3213131"));
         System.out.println(SecurityUtils.getSubject().getPrincipal());
         return result;
-
     }
 
 
