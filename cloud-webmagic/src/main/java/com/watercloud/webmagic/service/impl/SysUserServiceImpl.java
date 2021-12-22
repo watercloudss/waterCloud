@@ -6,11 +6,10 @@ import com.watercloud.webmagic.mapper.SysUserMapper;
 import com.watercloud.webmagic.service.ISysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
+
 
 /**
  * <p>
