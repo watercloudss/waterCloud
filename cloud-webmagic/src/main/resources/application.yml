@@ -56,7 +56,7 @@ spring:
           enabled: true
   kafka:
     #kafka地址，可以指定多个
-    bootstrap-servers: 192.168.137.174:9092
+    bootstrap-servers: 192.168.0.107:9092
     consumer:
       #指定group_id
       group-id: group_id
@@ -88,7 +88,8 @@ JWTConfig:
   EXPIRE_TIME: 1800000
 ShiroConfig:
   AnonUrls: /druid/**,/**/*.js,/**/*.css,/**/*.html,/**/*.svg,/**/*.pdf,/**/*.jpg,/**/*.png,/**/*.ico
-
+redission:
+  address: redis://127.0.0.1:6379
 
 
 
