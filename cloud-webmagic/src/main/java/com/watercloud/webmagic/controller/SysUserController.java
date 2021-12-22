@@ -116,7 +116,7 @@ public class SysUserController {
         System.out.println(sysLoginVo.getUsername()+":"+sysLoginVo.getPassword());
         Result<String> result = Result.OK("tes2");
         System.out.println(redisUtil.getExpire("redislock"));
-        System.out.println( redisUtil.releaseLock("redislock","3213131"));
+//        System.out.println( redisUtil.releaseLock("redislock","3213131"));
         System.out.println(SecurityUtils.getSubject().getPrincipal());
         return result;
     }

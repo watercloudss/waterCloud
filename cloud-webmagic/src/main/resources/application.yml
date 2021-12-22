@@ -37,8 +37,9 @@ spring:
         enabled: true
         login-username: admin
         login-password: 123456
+
   redis:
-    host: localhost
+    host: 127.0.0.1
     port: 6379
     password:
     lettuce:

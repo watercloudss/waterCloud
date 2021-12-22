@@ -39,6 +39,7 @@
         <hutool-version>5.7.9</hutool-version>
         <fastjson-version>1.2.38</fastjson-version>
         <kafka-version>2.5.6.RELEASE</kafka-version>
+        <redission-version>3.16.3</redission-version>
     </properties>
 
     <dependencyManagement>
@@ -178,6 +179,12 @@
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
                 <version>${kafka-version}</version>
+            </dependency>
+            <!-- redission -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redission-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
