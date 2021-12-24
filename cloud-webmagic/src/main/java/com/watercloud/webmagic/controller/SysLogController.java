@@ -2,7 +2,6 @@ package com.watercloud.webmagic.controller;
 
 
 import com.watercloud.webmagic.common.kafka.KafkaProducer;
-import com.watercloud.webmagic.service.DistributedLock;
 import com.watercloud.webmagic.service.impl.RedissonLockService;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -45,7 +44,7 @@ public class SysLogController {
 //        DistributedLock lock = redissonLockService.getDistributedLock(TEST_LOCK);
         RLock lock = redissonClient.getLock(TEST_LOCK);
         try{
-            boolean isLockSuccess = lock.tryLock(50,150, TimeUnit.SECONDS);
+            boolean isLockSuccess = lock.tryLock(3,150, TimeUnit.SECONDS);
             if(!isLockSuccess){
                 return "3";
             }
