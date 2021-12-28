@@ -8,5 +8,8 @@ spring:
       config:
         server-addr: 127.0.0.1:8848
         file-extension: yaml
-
-
+    sentinel:
+      enabled: true
+      eager: true
+      transport:
+        dashboard: 127.0.0.1:8858

@@ -1,6 +1,8 @@
 package com.watercloud.flash.controller;
 
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.watercloud.flash.feignapi.FlashItemFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,7 @@ public class FlashOrderController {
     private FlashItemFeign flashItemFeign;
 
     @GetMapping("/flash")
+    @SentinelResource(value = "cloudproviderflash",blockHandler = "handleException")
     public String getHttp(){
 //        HttpHeaders requestHeaders = new HttpHeaders();
 //        requestHeaders.add("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjbG91ZC13ZWJtYWdpYyIsImV4cCI6MTY0MDM2OTg3NywiaWF0IjoxNjQwMzY4MDc3LCJ1c2VybmFtZSI6ImFkbWluIn0.R_ve__4KP4tYamEBXLBdsL5Ar_C6lHVlBNk5tXhSdpA");
@@ -39,4 +42,7 @@ public class FlashOrderController {
 //        return restTemplate.getForObject(url+"/sys-log/kafka",String.class);
     }
 
+    public String handleException(BlockException exception){
+        return "被限流了！";
+    }
 }
