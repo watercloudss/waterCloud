@@ -30,16 +30,16 @@ public class FlashOrderController {
     private FlashItemFeign flashItemFeign;
 
     @GetMapping("/flash")
-    @SentinelResource(value = "cloudproviderflash",blockHandler = "flashHandlerException",blockHandlerClass = FlashBlockHandler.class)
+    @SentinelResource(value = "cloudproviderflash",fallback = "handleFallback2",blockHandler = "flashHandlerException",blockHandlerClass = FlashBlockHandler.class)
     public String getHttp(){
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        requestHeaders.add("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjbG91ZC13ZWJtYWdpYyIsImV4cCI6MTY0MDM2OTg3NywiaWF0IjoxNjQwMzY4MDc3LCJ1c2VybmFtZSI6ImFkbWluIn0.R_ve__4KP4tYamEBXLBdsL5Ar_C6lHVlBNk5tXhSdpA");
-//        org.springframework.http.HttpEntity<String> requestEntity =
-//                new  org.springframework.http.HttpEntity(requestHeaders);
-//        ResponseEntity<String> response = restTemplate.exchange(url+"/sys-log/kafka", HttpMethod.GET, requestEntity, String.class);
-//        String sttr = response.getBody();
-        //        return restTemplate.getForObject(url+"/sys-log/kafka",String.class);
+        if(true) {
+            int a= 1/0;
+        }
         String sttr = flashItemFeign.sendKafka();
         return sttr;
+    }
+
+    public String handleFallback2(){
+        return "服务降级返回";
     }
 }
