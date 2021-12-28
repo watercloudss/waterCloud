@@ -10,6 +10,7 @@ spring:
         file-extension: yaml
     sentinel:
       enabled: true
+      #取消Sentinel控制台懒加载
       eager: true
       transport:
         dashboard: 127.0.0.1:8858
