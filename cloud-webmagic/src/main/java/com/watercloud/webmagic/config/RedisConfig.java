@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config;
+package com.watercloud.webmagic.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

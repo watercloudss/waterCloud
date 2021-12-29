@@ -1,7 +1,7 @@
 package com.watercloud.webmagic.common.exception;
 
+import com.cloudwater.common.commonVo.Result;
 import com.watercloud.webmagic.common.util.CommonConstant;
-import com.watercloud.webmagic.common.commonVo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;

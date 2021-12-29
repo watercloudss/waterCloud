@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config;
+package com.watercloud.webmagic.config;
 
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

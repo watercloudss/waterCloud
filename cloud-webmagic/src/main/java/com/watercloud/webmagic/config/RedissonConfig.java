@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config;
+package com.watercloud.webmagic.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

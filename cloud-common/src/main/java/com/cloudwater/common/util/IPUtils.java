@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.util;
+package com.cloudwater.common.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

@@ -3,11 +3,11 @@ package com.watercloud.webmagic.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cloudwater.common.commonVo.Result;
 import com.watercloud.webmagic.common.aspect.annotation.AutoLogAnnotation;
-import com.watercloud.webmagic.common.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.common.util.CommonConstant;
 import com.watercloud.webmagic.common.util.RedisUtil;
-import com.watercloud.webmagic.common.commonVo.Result;
+import com.watercloud.webmagic.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysUserService;
 import com.watercloud.webmagic.vo.SysLoginVo;
@@ -50,7 +50,7 @@ public class SysUserController {
     DataSource dataSource;
 
     @PostMapping("/login")
-    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_2)
+    @AutoLogAnnotation(logType= CommonConstant.LOG_TYPE_2)
     public Result<JSONObject> login(@RequestBody @Valid SysLoginVo sysLoginVo){
         String username = sysLoginVo.getUsername();
         String password = sysLoginVo.getPassword();

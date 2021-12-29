@@ -1,15 +1,18 @@
-package com.watercloud.webmagic.common.config.shiro;
+package com.watercloud.webmagic.config.shiro;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.watercloud.webmagic.common.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.common.util.RedisUtil;
+import com.watercloud.webmagic.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.watercloud.webmagic.service.ISysRoleService;
 import com.watercloud.webmagic.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;

@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config.shiro.jwt;
+package com.watercloud.webmagic.config.shiro.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config.shiro;
+package com.watercloud.webmagic.config.shiro;
 
 import cn.hutool.core.util.StrUtil;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;

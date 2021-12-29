@@ -1,9 +1,9 @@
-package com.watercloud.webmagic.common.config.shiro.jwt;
+package com.watercloud.webmagic.config.shiro.jwt;
 
 import com.alibaba.fastjson.JSON;
-import com.watercloud.webmagic.common.aspect.annotation.AuthCheckAnnotation;
+import com.cloudwater.common.commonVo.Result;
 import com.watercloud.webmagic.common.util.CommonConstant;
-import com.watercloud.webmagic.common.commonVo.Result;
+import com.watercloud.webmagic.common.aspect.annotation.AuthCheckAnnotation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;

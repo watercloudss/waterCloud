@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config.shiro;
+package com.watercloud.webmagic.config.shiro;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;

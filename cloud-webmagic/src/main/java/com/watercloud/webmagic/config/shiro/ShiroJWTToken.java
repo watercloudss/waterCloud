@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config.shiro;
+package com.watercloud.webmagic.config.shiro;
 
 import org.apache.shiro.authc.AuthenticationToken;
 

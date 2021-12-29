@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.common.config;
+package com.watercloud.webmagic.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
