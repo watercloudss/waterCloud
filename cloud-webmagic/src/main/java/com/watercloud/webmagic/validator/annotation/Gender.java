@@ -1,6 +1,6 @@
-package com.watercloud.webmagic.common.validator.annotation;
+package com.watercloud.webmagic.validator.annotation;
 
-import com.watercloud.webmagic.common.validator.validatorImpl.GenderValidator;
+import com.watercloud.webmagic.validator.validatorImpl.GenderValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

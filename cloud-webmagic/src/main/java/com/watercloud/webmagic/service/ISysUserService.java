@@ -1,6 +1,6 @@
 package com.watercloud.webmagic.service;
 
-import com.watercloud.webmagic.common.validator.annotation.Gender;
+import com.watercloud.webmagic.validator.annotation.Gender;
 import com.watercloud.webmagic.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.validation.annotation.Validated;

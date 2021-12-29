@@ -1,6 +1,6 @@
 package com.watercloud.webmagic.service.impl;
 
-import com.watercloud.webmagic.common.validator.annotation.Gender;
+import com.watercloud.webmagic.validator.annotation.Gender;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.mapper.SysUserMapper;
 import com.watercloud.webmagic.service.ISysUserService;
