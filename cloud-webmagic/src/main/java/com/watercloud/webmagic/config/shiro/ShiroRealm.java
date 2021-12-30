@@ -80,13 +80,13 @@ public class ShiroRealm extends AuthorizingRealm {
     private boolean refreshRedisToken(String token,String username){
         String tokenValue = (String) redisUtil.get(token);
         if(StrUtil.isNotBlank(tokenValue)){
-            if(JwtTool.check(tokenValue)){
+//            if(JwtTool.check(tokenValue)){
                 String  newTokenValue = JwtTool.sign(username);
                 redisUtil.set(token,newTokenValue,EXPIRE_TIME/1000);
                 return true;
-            }else{
-                return false;
-            }
+//            }else{
+//                return false;
+//            }
         }else{
             return false;
         }

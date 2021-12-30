@@ -1,4 +1,4 @@
-package com.watercloud.getway;
+package com.watercloud.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,8 +9,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 */
 @SpringBootApplication
 @EnableDiscoveryClient
-public class CloudGetwayApplication {
+public class CloudGatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CloudGetwayApplication.class,args);
+        SpringApplication.run(CloudGatewayApplication.class,args);
     }
 }
