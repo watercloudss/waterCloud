@@ -79,11 +79,11 @@ public class SysUserController {
 
     @GetMapping("/logout")
     public Result<String> logout(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        redisUtil.del(token);
-        Subject subject = SecurityUtils.getSubject();
+//        String token = request.getHeader("Access-Token");
+//        redisUtil.del(token);
+//        Subject subject = SecurityUtils.getSubject();
         //这一步原理是认证时SimpleAuthenticationInfo()，第二个参数我们设置的token，所以logout一定要让shiro管理同时header带上token，这时SecurityUtils.getSubject()能拿到相关的值同时会清楚redis中该用户的权限
-        subject.logout();
+//        subject.logout();
         Result<String> result = Result.OK("成功注销");
         return result;
     }
