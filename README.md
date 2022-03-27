@@ -1,5 +1,8 @@
 # waterCloud
 ### 该项目主要用途是一个能够进行权限控制的手脚架，主要是自己日常开发感觉好用的技术和好用的点，把这些整合起来方便以后开发别的项目时快速搭建。
+netstat -ano | findstr "9000"
+taskkill -f -t -im  23908
+
 项目当前整合的技术有:
 - springboot
 - mybatisplus

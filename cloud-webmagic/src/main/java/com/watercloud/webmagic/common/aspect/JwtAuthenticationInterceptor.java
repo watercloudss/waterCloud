@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.config.shiro.jwt;
+package com.watercloud.webmagic.common.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.cloudwater.common.commonVo.Result;

@@ -1,7 +1,7 @@
 package com.watercloud.webmagic.kafka;
 
 import com.watercloud.webmagic.common.kafka.KafkaProducer;
-import org.apache.kafka.common.serialization.StringDeserializer;
+//import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @SpringBootTest
 public class KafkaTest {
     @Autowired
-    private KafkaProducer kafkaProducer;
+//    private KafkaProducer kafkaProducer;
 
     @Test
     public void sendMessage() throws InterruptedException {
@@ -23,7 +23,7 @@ public class KafkaTest {
         for (int i = 0; i < 10; i++) {
             String id = String.valueOf(i+1);
             String message = "我是一条消息"+i;
-            kafkaProducer.sendMessage(id, message, LocalDateTime.now());
+//            kafkaProducer.sendMessage(id, message, LocalDateTime.now());
         }
         TimeUnit.MINUTES.sleep(1);
     }
