@@ -37,7 +37,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
        if(loginPath.trim().equals(serverHttpRequest.getPath().toString().trim())||"/webmagic/sys-user/logout".equals(serverHttpRequest.getPath().toString().trim())){
            return chain.filter(exchange);
         }
-       List<String> tokens = serverHttpRequest.getHeaders().get("Access-Token");
+       List<String> tokens = serverHttpRequest.getHeaders().get("token");
        if(CollUtil.isEmpty(tokens)){
            ServerHttpResponse response = exchange.getResponse();
            DataBuffer buffer = response.bufferFactory().wrap(this.getResult("510","鉴权失败，无token！"));

@@ -77,27 +77,24 @@ public class SysUserController {
          return result;
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public Result<String> logout(HttpServletRequest request) {
 //        String token = request.getHeader("Access-Token");
 //        redisUtil.del(token);
 //        Subject subject = SecurityUtils.getSubject();
         //这一步原理是认证时SimpleAuthenticationInfo()，第二个参数我们设置的token，所以logout一定要让shiro管理同时header带上token，这时SecurityUtils.getSubject()能拿到相关的值同时会清楚redis中该用户的权限
 //        subject.logout();
+        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
         Result<String> result = Result.OK("成功注销");
         return result;
     }
 
-    @PostMapping("/test")
-    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
+    @RequestMapping("/info")
+//    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
 //    @RequiresRoles({"user"})
-    @RequiresPermissions("user:add")
-    public Result<SysUser> test(String username,String pass, String gender){
-        System.out.println(username+":"+pass+":"+gender);
+//    @RequiresPermissions("user:add")
+    public Result<SysUser> info(String token){
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
-        redisTemplate.opsForValue().set(sysUser.getUsername(),sysUser);
-        SysUser sysUser1 = (SysUser) redisUtil.get(sysUser.getUsername());
-        iSysUserService.test(username,pass,gender);
         Result<SysUser> result = Result.OK(sysUser);
         return result;
     }

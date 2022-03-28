@@ -51,7 +51,7 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
-        String token = req.getHeader("Access-Token");
+        String token = req.getHeader("token");
         return token != null;
     }
 
@@ -61,7 +61,7 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String token = httpServletRequest.getHeader("Access-Token");
+        String token = httpServletRequest.getHeader("token");
         ShiroJWTToken jwtToken = new ShiroJWTToken(token);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         getSubject(request, response).login(jwtToken);
@@ -74,17 +74,17 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
-        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
-        // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
-        if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
-            httpServletResponse.setStatus(HttpStatus.OK.value());
-            return false;
-        }
+//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
+//        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+//        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
+//        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+//        // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
+//        if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
+//            httpServletResponse.setStatus(HttpStatus.OK.value());
+//            return false;
+//        }
         return super.preHandle(request, response);
     }
 
