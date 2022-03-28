@@ -1,4 +1,4 @@
-package com.watercloud.webmagic.vo;
+package com.watercloud.webmagic.vo.user;
 
 import lombok.Data;
 

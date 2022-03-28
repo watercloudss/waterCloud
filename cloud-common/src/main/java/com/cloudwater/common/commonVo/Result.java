@@ -34,7 +34,7 @@ public class Result<T> implements Serializable {
 	/**
 	 * 返回数据对象 data
 	 */
-	private T result;
+	private T Data;
 	
 	/**
 	 * 时间戳
@@ -70,7 +70,7 @@ public class Result<T> implements Serializable {
 		Result<Object> r = new Result<Object>();
 		r.setSuccess(true);
 		r.setCode(CommonResultConstant.SC_OK_200);
-		r.setResult(data);
+		r.setData(data);
 		return r;
 	}
 
@@ -86,7 +86,7 @@ public class Result<T> implements Serializable {
 		Result<T> r = new Result<T>();
 		r.setSuccess(true);
 		r.setCode(CommonResultConstant.SC_OK_200);
-		r.setResult(data);
+		r.setData(data);
 		return r;
 	}
 
@@ -95,7 +95,7 @@ public class Result<T> implements Serializable {
 		r.setSuccess(true);
 		r.setCode(CommonResultConstant.SC_OK_200);
 		r.setMessage(msg);
-		r.setResult(data);
+		r.setData(data);
 		return r;
 	}
 

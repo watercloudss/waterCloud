@@ -1,6 +1,7 @@
 package com.watercloud.webmagic.controller;
 
 
+import cn.hutool.system.UserInfo;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cloudwater.common.commonVo.Result;
@@ -9,10 +10,11 @@ import com.watercloud.webmagic.common.util.CommonConstant;
 import com.watercloud.webmagic.common.util.RedisUtil;
 import com.watercloud.webmagic.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.entity.SysUser;
+import com.watercloud.webmagic.service.ISysRoleService;
 import com.watercloud.webmagic.service.ISysUserService;
-import com.watercloud.webmagic.vo.SysLoginVo;
+import com.watercloud.webmagic.vo.user.SysLoginVo;
+import com.watercloud.webmagic.vo.user.UserInfoVo;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import javax.validation.Valid;
+import java.util.Set;
 
 /**
  * <p>
@@ -48,6 +51,8 @@ public class SysUserController {
     private RedisUtil redisUtil;
     @Autowired
     DataSource dataSource;
+    @Autowired
+    private ISysRoleService iSysRoleService;
 
     @PostMapping("/login")
     @AutoLogAnnotation(logType= CommonConstant.LOG_TYPE_2)
@@ -68,7 +73,7 @@ public class SysUserController {
                 JSONObject res = new JSONObject();
                 res.put("token", token);
                 result.setCode(CommonConstant.SC_OK_200);
-                result.setResult(res);
+                result.setData(res);
             }else{
                 result.setMessage("用户名或密码错误！！！");
                 result.setCode(CommonConstant.SC_NO_AUTHZ);
@@ -79,23 +84,26 @@ public class SysUserController {
 
     @PostMapping("/logout")
     public Result<String> logout(HttpServletRequest request) {
-//        String token = request.getHeader("Access-Token");
-//        redisUtil.del(token);
-//        Subject subject = SecurityUtils.getSubject();
+        String token = request.getHeader("token");
+        redisUtil.del(token);
+        Subject subject = SecurityUtils.getSubject();
         //这一步原理是认证时SimpleAuthenticationInfo()，第二个参数我们设置的token，所以logout一定要让shiro管理同时header带上token，这时SecurityUtils.getSubject()能拿到相关的值同时会清楚redis中该用户的权限
-//        subject.logout();
-        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        subject.logout();
         Result<String> result = Result.OK("成功注销");
         return result;
     }
 
     @RequestMapping("/info")
-//    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
+    @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
 //    @RequiresRoles({"user"})
 //    @RequiresPermissions("user:add")
-    public Result<SysUser> info(String token){
+    public Result<UserInfoVo> info(String token){
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
-        Result<SysUser> result = Result.OK(sysUser);
+        Set<String> roleSet = iSysRoleService.getUserRole(sysUser.getId());
+        UserInfoVo userInfoVo = new UserInfoVo();
+        userInfoVo.setRoles(roleSet);
+        userInfoVo.setUser(sysUser);
+        Result<UserInfoVo> result = Result.OK(userInfoVo);
         return result;
     }
 

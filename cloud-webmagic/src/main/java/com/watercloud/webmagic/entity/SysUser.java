@@ -38,7 +38,7 @@ public class SysUser implements Serializable {
     /**
      * 真实姓名
      */
-    private String realname;
+    private String name;
 
     /**
      * 密码
@@ -165,5 +165,8 @@ public class SysUser implements Serializable {
      */
     private String clientId;
 
-
+    /**
+     * 个人描述
+     */
+    private String introduction;
 }
