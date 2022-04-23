@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author lly
- * @since 2021-09-19
+ * @since 2022-04-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -29,13 +29,26 @@ public class SysPermission implements Serializable {
 
     private Integer parentId;
 
-    private String url;
+    private String path;
 
-    private String urlName;
+    private String component;
 
-    private Integer urlType;
+    private Integer redirect;
+
+    @TableField("alwaysShow")
+    private String alwaysshow;
+
+    private String name;
+
+    private String title;
 
     private String icon;
+
+    private String roles;
+
+    private String permission;
+
+    private String noCache;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
@@ -43,8 +56,10 @@ public class SysPermission implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
+    @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
 

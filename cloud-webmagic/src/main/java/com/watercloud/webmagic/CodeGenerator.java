@@ -23,7 +23,7 @@ public class CodeGenerator {
     private static final String jdbcUrl = "jdbc:mysql://localhost:3306/cloud-webmagic?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai";
     private static final String jdbcDriveName = "com.mysql.cj.jdbc.Driver";
     private static final String jdbcUsername = "root";
-    private static final String jdbcPassword = "123";
+    private static final String jdbcPassword = "123456";
     /**
      * <p>
      * 读取控制台内容

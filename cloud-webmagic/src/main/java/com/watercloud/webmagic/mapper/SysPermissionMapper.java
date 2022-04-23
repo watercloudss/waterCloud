@@ -12,9 +12,10 @@ import java.util.List;
  * </p>
  *
  * @author lly
- * @since 2021-09-19
+ * @since 2022-04-23
  */
 @Mapper
 public interface SysPermissionMapper extends BaseMapper<SysPermission> {
     public List<String> getUserPermission(Integer userId);
+    public List<SysPermission> getSysPermissionByUserId(Integer userId);
 }

@@ -3,6 +3,7 @@ package com.watercloud.webmagic.service;
 import com.watercloud.webmagic.entity.SysPermission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,8 +12,9 @@ import java.util.Set;
  * </p>
  *
  * @author lly
- * @since 2021-09-19
+ * @since 2022-04-23
  */
 public interface ISysPermissionService extends IService<SysPermission> {
-     public Set<String> getUserPermission(Integer userId);
+    public Set<String> getUserPermission(Integer userId);
+    public List<SysPermission> getSysPermissionByUserId(Integer userId);
 }
