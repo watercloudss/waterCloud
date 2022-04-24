@@ -47,21 +47,23 @@
     </select>
 
     <select id="getSysPermissionByUserId" parameterType="Integer" resultType="com.watercloud.webmagic.entity.SysPermission">
-            WITH RECURSIVE sp AS (
-        SELECT
-            a.*
+                 WITH RECURSIVE sp AS (
+            SELECT
+                a.*
+            FROM
+                sys_permission a
+            WHERE
+                id IN ( SELECT rp.permission_id FROM sys_user_role ur INNER JOIN sys_role_permission rp ON ur.role_id = rp.role_id WHERE user_id = #{userId} )
+                AND a.STATUS = '1' UNION ALL
+            SELECT
+                b.*
+            FROM
+                sys_permission b
+                INNER JOIN sp sp1 ON b.parent_id = sp1.id
+                AND b.STATUS = '1'
+            ) SELECT
+            *
         FROM
-            sys_permission a
-        WHERE
-            id IN ( SELECT rp.permission_id FROM sys_user_role ur INNER JOIN sys_role_permission rp ON ur.role_id = rp.role_id WHERE user_id = #{userId} ) UNION ALL
-        SELECT
-            b.*
-        FROM
-            sys_permission b
-            INNER JOIN sp sp1 ON b.parent_id = sp1.id
-        ) SELECT
-        *
-    FROM
-        sp
+            sp
     </select>
 </mapper>

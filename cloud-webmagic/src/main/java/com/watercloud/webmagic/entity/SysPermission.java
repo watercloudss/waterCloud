@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,7 +35,7 @@ public class SysPermission implements Serializable {
 
     private String component;
 
-    private Integer redirect;
+    private String redirect;
 
     @TableField("alwaysShow")
     private String alwaysshow;
@@ -62,5 +64,6 @@ public class SysPermission implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
+    private List<SysPermission> children;
 
 }

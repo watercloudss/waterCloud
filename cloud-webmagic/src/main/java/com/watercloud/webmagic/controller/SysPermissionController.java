@@ -8,6 +8,7 @@ import com.watercloud.webmagic.common.util.CommonConstant;
 import com.watercloud.webmagic.entity.SysPermission;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
+import com.watercloud.webmagic.vo.menu.MenuVo;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,10 +41,10 @@ public class SysPermissionController {
 //        return result;
 //    }
     @PostMapping("/getRouters")
-    public Result<List<SysPermission>> getRouters(){
+    public Result<List<MenuVo>> getRouters(){
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        List<SysPermission> sysPermissionsList = iSysPermissionService.getSysPermissionByUserId(sysUser.getId());
-        Result<List<SysPermission>> result = Result.OK(sysPermissionsList);
+        List<MenuVo> menuVoList = iSysPermissionService.getSysPermissionByUserId(sysUser.getId());
+        Result<List<MenuVo>> result = Result.OK(menuVoList);
         return result;
     }
 }
