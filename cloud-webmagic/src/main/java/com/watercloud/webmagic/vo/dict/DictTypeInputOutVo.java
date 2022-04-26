@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class DictTypeListOutVo {
+public class DictTypeInputOutVo {
     /**
      * 字典主键
      */

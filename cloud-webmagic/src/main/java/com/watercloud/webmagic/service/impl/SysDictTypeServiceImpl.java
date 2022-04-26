@@ -12,10 +12,11 @@ import com.watercloud.webmagic.mapper.SysDictTypeMapper;
 import com.watercloud.webmagic.service.ISysDictDataService;
 import com.watercloud.webmagic.service.ISysDictTypeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.watercloud.webmagic.vo.dict.DictTypeListOutVo;
+import com.watercloud.webmagic.vo.dict.DictTypeInputOutVo;
 import com.watercloud.webmagic.vo.dict.DictTypeQueryParamVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -46,18 +47,53 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             );
         }
         IPage page = this.page(iPage,queryWrapper);
-        page.setRecords(Convert.toList(DictTypeListOutVo.class,page.getRecords()));
+        page.setRecords(Convert.toList(DictTypeInputOutVo.class,page.getRecords()));
         return page;
     }
 
     @Override
+    public DictTypeInputOutVo getDictById(Long dictId) {
+        SysDictType sysDictType = this.getById(dictId);
+        DictTypeInputOutVo dictTypeOutVo = Convert.convert(DictTypeInputOutVo.class,sysDictType);
+        return dictTypeOutVo;
+    }
+
+    @Transactional
+    @Override
+    public Boolean updateDictByIdOrSave(DictTypeInputOutVo dictTypeInputOutVo) {
+        Boolean dataStatus = true;
+        Boolean typeStatus = true;
+        SysDictType sysDictType = Convert.convert(SysDictType.class,dictTypeInputOutVo);
+        if (dictTypeInputOutVo.getDictId() != null) {
+            if (StrUtil.isNotEmpty(dictTypeInputOutVo.getDictType())) {
+                SysDictType sdt = this.getById(dictTypeInputOutVo.getDictId());
+                QueryWrapper<SysDictData> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("dict_type", sdt.getDictType());
+                if(iSysDictDataService.count(queryWrapper)>0){
+                    SysDictData sysDictData = new SysDictData();
+                    sysDictData.setDictType(dictTypeInputOutVo.getDictType());
+                    dataStatus = iSysDictDataService.update(sysDictData, queryWrapper);
+                }
+            }
+            typeStatus = this.updateById(sysDictType);
+        }else{
+            typeStatus = this.save(sysDictType);
+        }
+        return dataStatus&&typeStatus;
+    }
+
+    @Transactional
+    @Override
     public Boolean delByDeptType(String dictType) {
+        Boolean dataStatus = true;
         QueryWrapper<SysDictType> qwdt = new QueryWrapper<>();
         qwdt.eq("dict_type",dictType);
-        ;
         QueryWrapper<SysDictData> qwdd = new QueryWrapper<>();
-        qwdd.eq("dict_type",dictType);
-        if(this.remove(qwdt)&&iSysDictDataService.remove(qwdd)){
+        qwdd.eq("dict_type", dictType);
+        if(iSysDictDataService.count(qwdd)>0) {
+            dataStatus = iSysDictDataService.remove(qwdd);
+        }
+        if(this.remove(qwdt)&&dataStatus){
             return true;
         }
         return false;
