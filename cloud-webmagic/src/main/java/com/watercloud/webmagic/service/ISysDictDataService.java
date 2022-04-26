@@ -1,7 +1,9 @@
 package com.watercloud.webmagic.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.watercloud.webmagic.entity.SysDictData;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.watercloud.webmagic.vo.dict.DictDataQueryParamVo;
 
 /**
  * <p>
@@ -12,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-04-25
  */
 public interface ISysDictDataService extends IService<SysDictData> {
-
+    public IPage list(DictDataQueryParamVo dictDataQueryParamVo);
 }

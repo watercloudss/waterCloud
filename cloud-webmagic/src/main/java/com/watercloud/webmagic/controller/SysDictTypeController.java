@@ -9,6 +9,9 @@ import com.watercloud.webmagic.vo.dict.DictTypeQueryParamVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 字典类型表 前端控制器
@@ -37,18 +40,26 @@ public class SysDictTypeController {
         return result;
     }
 
+    @GetMapping("/getTypeGroup")
+    public Result<List<Map<String,String>>> getDictById(){
+        Result<List<Map<String,String>>> result = Result.OK(iSysDictTypeService.getTypeGroup());
+        return result;
+    }
+
     @PutMapping("/updateDictByIdOrSave")
     public Result updateDictByIdOrSave(@RequestBody DictTypeInputOutVo dictTypeInputOutVo){
         Result result = null;
         if(iSysDictTypeService.updateDictByIdOrSave(dictTypeInputOutVo)){
             result = Result.OK();
+        }else{
+            result = Result.error("新增失败：字典类型编码已存在！");
         }
         return result;
     }
 
     @DeleteMapping("/delByType/{deptType}")
     public Result del(@PathVariable String deptType){
-        Boolean status = iSysDictTypeService.delByDeptType(deptType);
+        Boolean status = iSysDictTypeService.delByDictType(deptType);
         Result result = null;
         if(status){
             result = Result.OK();

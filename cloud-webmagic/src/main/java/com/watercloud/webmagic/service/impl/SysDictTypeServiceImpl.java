@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.watercloud.webmagic.entity.SysDictData;
 import com.watercloud.webmagic.entity.SysDictType;
+import com.watercloud.webmagic.mapper.SysDictDataMapper;
 import com.watercloud.webmagic.mapper.SysDictTypeMapper;
 import com.watercloud.webmagic.service.ISysDictDataService;
 import com.watercloud.webmagic.service.ISysDictTypeService;
@@ -17,6 +18,9 @@ import com.watercloud.webmagic.vo.dict.DictTypeQueryParamVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -30,6 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDictType> implements ISysDictTypeService {
     @Autowired
     private ISysDictDataService iSysDictDataService;
+    @Autowired
+    private SysDictDataMapper sysDictDataMapper;
 
     @Override
     public IPage list(DictTypeQueryParamVo dictTypeQueryParamVo) {
@@ -77,14 +83,21 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             }
             typeStatus = this.updateById(sysDictType);
         }else{
-            typeStatus = this.save(sysDictType);
+            QueryWrapper<SysDictType> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("dict_type",dictTypeInputOutVo.getDictType());
+            int sdtCount = this.count(queryWrapper);
+            if(sdtCount>0){
+                typeStatus = false;
+            }else{
+                typeStatus = this.save(sysDictType);
+            }
         }
         return dataStatus&&typeStatus;
     }
 
     @Transactional
     @Override
-    public Boolean delByDeptType(String dictType) {
+    public Boolean delByDictType(String dictType) {
         Boolean dataStatus = true;
         QueryWrapper<SysDictType> qwdt = new QueryWrapper<>();
         qwdt.eq("dict_type",dictType);
@@ -97,5 +110,11 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Map<String,String>> getTypeGroup() {
+        List<Map<String,String>> list = sysDictDataMapper.getTypeGroup();
+        return list;
     }
 }

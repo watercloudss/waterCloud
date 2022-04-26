@@ -66,7 +66,7 @@ public class SysDictData implements Serializable {
     private String isDefault;
 
     /**
-     * 状态（0正常 1停用）
+     * 状态（1正常 0停用）
      */
     private String status;
 

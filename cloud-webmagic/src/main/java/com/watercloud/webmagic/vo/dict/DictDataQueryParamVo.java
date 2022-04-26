@@ -3,8 +3,8 @@ package com.watercloud.webmagic.vo.dict;
 import lombok.Data;
 
 @Data
-public class DictTypeQueryParamVo {
-    private String dictName;
+public class DictDataQueryParamVo {
+    private String name;
     private String dictType;
     private String beginTime;
     private String endTime;

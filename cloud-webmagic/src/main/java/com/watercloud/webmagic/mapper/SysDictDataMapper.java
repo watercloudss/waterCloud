@@ -4,6 +4,9 @@ import com.watercloud.webmagic.entity.SysDictData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 字典数据表 Mapper 接口
@@ -14,5 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysDictDataMapper extends BaseMapper<SysDictData> {
-
+    public List<Map<String,String>> getTypeGroup();
 }

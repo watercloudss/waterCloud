@@ -25,4 +25,15 @@
         dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark
     </sql>
 
+    <select id="getTypeGroup" resultType="java.util.HashMap">
+                SELECT
+            dict_type,
+            dict_name
+        FROM
+            sys_dict_type
+        GROUP BY
+            dict_type,
+            dict_name
+    </select>
+
 </mapper>

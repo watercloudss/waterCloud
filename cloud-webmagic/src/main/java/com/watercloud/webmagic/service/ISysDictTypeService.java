@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.watercloud.webmagic.vo.dict.DictTypeInputOutVo;
 import com.watercloud.webmagic.vo.dict.DictTypeQueryParamVo;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 字典类型表 服务类
@@ -18,5 +21,6 @@ public interface ISysDictTypeService extends IService<SysDictType> {
      public IPage list(DictTypeQueryParamVo dictTypeQueryParamVo);
      public DictTypeInputOutVo getDictById(Long dictId);
      public Boolean updateDictByIdOrSave(DictTypeInputOutVo dictTypeInputOutVo);
-     public Boolean delByDeptType(String dictType);
+     public Boolean delByDictType(String dictType);
+     public List<Map<String,String>> getTypeGroup();
 }
