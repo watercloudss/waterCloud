@@ -1,19 +1,31 @@
 package com.watercloud.webmagic.controller;
 
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.UserInfo;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloudwater.common.commonVo.Result;
 import com.watercloud.webmagic.common.aspect.annotation.AutoLogAnnotation;
 import com.watercloud.webmagic.common.util.CommonConstant;
 import com.watercloud.webmagic.common.util.RedisUtil;
 import com.watercloud.webmagic.config.shiro.jwt.JwtTool;
+import com.watercloud.webmagic.entity.SysDictType;
+import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysRoleService;
 import com.watercloud.webmagic.service.ISysUserService;
+import com.watercloud.webmagic.vo.dict.DictTypeInputOutVo;
+import com.watercloud.webmagic.vo.role.RoleInputOutVo;
+import com.watercloud.webmagic.vo.role.RoleQueryParamVo;
 import com.watercloud.webmagic.vo.user.SysLoginVo;
 import com.watercloud.webmagic.vo.user.UserInfoVo;
+import com.watercloud.webmagic.vo.user.UserInputOutVo;
+import com.watercloud.webmagic.vo.user.UserQueryParamVo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,5 +148,61 @@ public class SysUserController {
     @GetMapping("/403")
     public Result<?> noauth() {
         return Result.error("没有认证，请登录认证!");
+    }
+
+    @GetMapping("/list")
+    public Result<IPage> list(UserQueryParamVo userQueryParamVo) {
+        IPage iPage = new Page<>();
+        iPage.setCurrent(userQueryParamVo.getPageNum());
+        iPage.setSize(userQueryParamVo.getPageSize());
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        if(StrUtil.isNotEmpty(userQueryParamVo.getName()))
+            queryWrapper.eq("name",userQueryParamVo.getName());
+        if(StrUtil.isNotEmpty(userQueryParamVo.getUsername()))
+            queryWrapper.eq("username",userQueryParamVo.getUsername());
+        if(StrUtil.isNotEmpty(userQueryParamVo.getBeginTime())&&StrUtil.isNotEmpty(userQueryParamVo.getEndTime())) {
+            queryWrapper.between("create_time",userQueryParamVo.getBeginTime()
+                    , DateUtil.format(DateUtil.offsetDay(DateUtil.parse(userQueryParamVo.getEndTime()), 1), "yyyy-MM-dd")
+            );
+        }
+        queryWrapper.orderByDesc("create_time");
+        IPage page = iSysUserService.page(iPage,queryWrapper);
+        page.setRecords(Convert.toList(UserInputOutVo.class,page.getRecords()));
+        Result<IPage> result = Result.OK(iPage);
+        return result;
+    }
+
+    @GetMapping("/getById/{id}")
+    public Result<RoleInputOutVo> getByDictCode(@PathVariable Integer id){
+        SysUser sysUser = iSysUserService.getById(id);
+        UserInputOutVo userInputOutVo = Convert.convert(UserInputOutVo.class,sysUser);
+        Result result = Result.OK(userInputOutVo);
+        return result;
+    }
+
+    @PutMapping("/updateOrSave")
+    public Result updateDictByIdOrSave(@RequestBody UserInputOutVo userInputOutVo){
+        SysUser sysUser = Convert.convert(SysUser.class,userInputOutVo);
+        Result result = null;
+        if(iSysUserService.saveOrUpdate(sysUser)){
+            result = Result.OK();
+        }else{
+            result = Result.error("操作失败");
+        }
+        return result;
+    }
+
+    @DeleteMapping("/del/{id}")
+    public Result  del(@PathVariable Integer id){
+        SysUser sysUser = new SysUser();
+        sysUser.setDelFlag(true);
+        sysUser.setId(id);
+        Result result = null;
+        if(iSysUserService.updateById(sysUser)){
+            result = Result.OK();
+        }else{
+            result = Result.error("删除失败");
+        }
+        return result;
     }
 }
