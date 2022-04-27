@@ -45,4 +45,22 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
         page.setRecords(Convert.toList(DictDataInputOutVo.class,page.getRecords()));
         return page;
     }
+
+    @Override
+    public DictDataInputOutVo getByDictCode(Long dictCode) {
+        SysDictData sysDictData = this.getById(dictCode);
+        DictDataInputOutVo dictDataInputOutVo = Convert.convert(DictDataInputOutVo.class,sysDictData);
+        return dictDataInputOutVo;
+    }
+
+    @Override
+    public Boolean updateDictByIdOrSave(DictDataInputOutVo dictDataInputOutVo) {
+        SysDictData sysDictData = Convert.convert(SysDictData.class,dictDataInputOutVo);
+        return this.saveOrUpdate(sysDictData);
+    }
+
+    @Override
+    public Boolean delByDictCode(Long dictCode) {
+        return this.removeById(dictCode);
+    }
 }
