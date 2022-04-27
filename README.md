@@ -35,3 +35,8 @@ taskkill -f -t -im  23908
 
 由于本人是搞后端的对前端不太熟悉，所以目前只有后端程序，接口权限配置都是直接在表中直接操作的，后面会把开源的ant-design-vue拿来做成可以在前端配置权限的项目。后面项目就像网上那些开源的管理系统一样，我自己搞一遍熟悉技术练手，有好的意见还请多多指教！
 
+- INSERT INTO `cloud-webmagic`.`sys_permission` ( `parent_id`, `path`, `component`, `redirect`, `alwaysShow`, `name`, `title`, `icon`, `roles`, `noCache`, `permission`, `create_time`, `update_time`, `create_by`, `update_by`, `status`) VALUES ( 0, '/user', 'Layout', 'noRedirect', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-04-27 16:17:42', '2022-04-27 16:17:51', NULL, NULL, '1');
+  
+  INSERT INTO `cloud-webmagic`.`sys_permission` ( `parent_id`, `path`, `component`, `redirect`, `alwaysShow`, `name`, `title`, `icon`, `roles`, `noCache`, `permission`, `create_time`, `update_time`, `create_by`, `update_by`, `status`) VALUES ( 9, 'index', 'user/index', NULL, NULL, 'userIndex', '角色管理', 'peoples', NULL, '1', NULL, '2022-04-27 16:20:58', '2022-04-27 16:21:02', NULL, NULL, '1');
+  
+  INSERT INTO `cloud-webmagic`.`sys_role_permission` ( `role_id`, `permission_id`, `create_time`, `update_time`, `create_by`, `update_by`) VALUES ( 1, 9, '2022-04-27 08:25:05', '2022-04-27 08:25:05', NULL, NULL);
