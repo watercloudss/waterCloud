@@ -39,7 +39,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
     @Override
     public IPage list(DictTypeQueryParamVo dictTypeQueryParamVo) {
-        IPage<SysDictType> iPage = new Page<>();
+        IPage iPage = new Page<>();
         iPage.setCurrent(dictTypeQueryParamVo.getPageNum());
         iPage.setSize(dictTypeQueryParamVo.getPageSize());
         QueryWrapper<SysDictType> queryWrapper = new QueryWrapper<>();

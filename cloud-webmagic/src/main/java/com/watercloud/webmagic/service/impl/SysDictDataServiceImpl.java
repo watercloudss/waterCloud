@@ -27,7 +27,7 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
 
     @Override
     public IPage list(DictDataQueryParamVo dictDataQueryParamVo) {
-        IPage<SysDictData> iPage = new Page<>();
+        IPage iPage = new Page<>();
         iPage.setCurrent(dictDataQueryParamVo.getPageNum());
         iPage.setSize(dictDataQueryParamVo.getPageSize());
         QueryWrapper<SysDictData> queryWrapper = new QueryWrapper<>();
