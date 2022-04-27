@@ -1,7 +1,10 @@
 package com.watercloud.webmagic.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.watercloud.webmagic.entity.SysRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.watercloud.webmagic.vo.dict.DictDataQueryParamVo;
+import com.watercloud.webmagic.vo.role.RoleQueryParamVo;
 
 import java.util.Set;
 
@@ -14,5 +17,6 @@ import java.util.Set;
  * @since 2021-09-19
  */
 public interface ISysRoleService extends IService<SysRole> {
-     Set<String> getUserRole(Integer userId);
+     public Set<String> getUserRole(Integer userId);
+     public IPage list(RoleQueryParamVo roleQueryParamVo);
 }
