@@ -24,6 +24,8 @@ import java.util.Map;
 public class ShiroConfig {
     @Value("${ShiroConfig.AnonUrls}")
     private String AnonUrls;
+    @Value("${ShiroConfig.redisExpire}")
+    private Integer redisExpire;
 
     @Bean
     public ShiroFilterFactoryBean factory(SecurityManager securityManager) {
@@ -109,7 +111,7 @@ public class ShiroConfig {
         //redis中针对不同用户缓存(此处的id需要对应user实体中的id字段,用于唯一标识)
         redisCacheManager.setPrincipalIdFieldName("id");
         //用户权限信息缓存时间
-        redisCacheManager.setExpire(28800);
+        redisCacheManager.setExpire(redisExpire);
         return redisCacheManager;
     }
 

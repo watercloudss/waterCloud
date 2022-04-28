@@ -100,7 +100,7 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        log.info("————权限认证————");
+        log.info("————权限认证方法————");
         SysUser sysUser = (SysUser) principalCollection.getPrimaryPrincipal();
         Integer userId = sysUser.getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
