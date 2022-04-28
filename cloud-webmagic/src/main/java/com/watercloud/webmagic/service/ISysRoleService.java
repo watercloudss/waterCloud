@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.watercloud.webmagic.vo.dict.DictDataQueryParamVo;
 import com.watercloud.webmagic.vo.role.RoleQueryParamVo;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,4 +21,5 @@ import java.util.Set;
 public interface ISysRoleService extends IService<SysRole> {
      public Set<String> getUserRole(Integer userId);
      public IPage list(RoleQueryParamVo roleQueryParamVo);
+     public List<Map<String,String>> getRoleGroup();
 }

@@ -17,7 +17,9 @@ import com.watercloud.webmagic.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.entity.SysDictType;
 import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.entity.SysUser;
+import com.watercloud.webmagic.entity.SysUserRole;
 import com.watercloud.webmagic.service.ISysRoleService;
+import com.watercloud.webmagic.service.ISysUserRoleService;
 import com.watercloud.webmagic.service.ISysUserService;
 import com.watercloud.webmagic.vo.dict.DictTypeInputOutVo;
 import com.watercloud.webmagic.vo.role.RoleInputOutVo;
@@ -31,6 +33,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +68,8 @@ public class SysUserController {
     DataSource dataSource;
     @Autowired
     private ISysRoleService iSysRoleService;
+    @Autowired
+    private ISysUserRoleService iSysUserRoleService;
 
     @PostMapping("/login")
     @AutoLogAnnotation(logType= CommonConstant.LOG_TYPE_2)
@@ -165,6 +170,7 @@ public class SysUserController {
                     , DateUtil.format(DateUtil.offsetDay(DateUtil.parse(userQueryParamVo.getEndTime()), 1), "yyyy-MM-dd")
             );
         }
+        queryWrapper.eq("del_flag","0");
         queryWrapper.orderByDesc("create_time");
         IPage page = iSysUserService.page(iPage,queryWrapper);
         page.setRecords(Convert.toList(UserInputOutVo.class,page.getRecords()));
@@ -174,17 +180,45 @@ public class SysUserController {
 
     @GetMapping("/getById/{id}")
     public Result<RoleInputOutVo> getByDictCode(@PathVariable Integer id){
+        QueryWrapper<SysUserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",id);
+        SysUserRole sysUserRole = iSysUserRoleService.getOne(queryWrapper);
         SysUser sysUser = iSysUserService.getById(id);
         UserInputOutVo userInputOutVo = Convert.convert(UserInputOutVo.class,sysUser);
+        if(sysUserRole!=null){
+            SysRole sysRole = iSysRoleService.getById(sysUserRole.getRoleId());
+            userInputOutVo.setRoleCode(sysRole.getRoleCode());
+        }
         Result result = Result.OK(userInputOutVo);
         return result;
     }
 
     @PutMapping("/updateOrSave")
+    @Transactional
     public Result updateDictByIdOrSave(@RequestBody UserInputOutVo userInputOutVo){
         SysUser sysUser = Convert.convert(SysUser.class,userInputOutVo);
+        QueryWrapper<SysRole> qwsr = new QueryWrapper<>();
+        qwsr.eq("role_code",userInputOutVo.getRoleCode());
+        SysRole sysRole = iSysRoleService.getOne(qwsr);
+        boolean uFlag=true;
+        boolean urFlag=true;
+        if(userInputOutVo.getId()!=null){
+            QueryWrapper<SysUserRole> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("user_id",userInputOutVo.getId());
+            SysUserRole sysUserRole = iSysUserRoleService.getOne(queryWrapper);
+            sysUserRole.setRoleId(sysRole.getId());
+            urFlag = iSysUserRoleService.updateById(sysUserRole);
+            uFlag = iSysUserService.updateById(sysUser);
+        }else{
+            sysUser.setPassword("8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92");
+            uFlag = iSysUserService.save(sysUser);
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setRoleId(sysRole.getId());
+            sysUserRole.setUserId(sysUser.getId());
+            urFlag = iSysUserRoleService.save(sysUserRole);
+        }
         Result result = null;
-        if(iSysUserService.saveOrUpdate(sysUser)){
+        if(uFlag&&urFlag){
             result = Result.OK();
         }else{
             result = Result.error("操作失败");

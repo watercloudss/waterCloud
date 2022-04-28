@@ -29,4 +29,12 @@
         WHERE
             u.id = #{Integer}
     </select>
+
+    <select id="getRoleGroup" resultType="map">
+            SELECT
+                role_code,
+                role_name
+            FROM
+                sys_role
+    </select>
 </mapper>

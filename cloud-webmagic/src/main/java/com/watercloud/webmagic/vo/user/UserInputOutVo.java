@@ -81,10 +81,20 @@ public class UserInputOutVo {
     private String introduction;
 
     /**
+     * 角色编码
+     */
+    private String roleCode;
+
+    /**
      * 创建时间
      */
     @JsonFormat( pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
+
+    /**
+     * 创建时间
+     */
+    private String createBy;
 
 }

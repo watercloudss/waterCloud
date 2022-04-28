@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -59,5 +60,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         IPage iPage  = this.page(page,queryWrapper);
         page.setRecords(Convert.toList(RoleInputOutVo.class,page.getRecords()));
         return iPage;
+    }
+
+    @Override
+    public List<Map<String, String>> getRoleGroup() {
+        return sysRoleMapper.getRoleGroup();
     }
 }

@@ -18,6 +18,9 @@ import com.watercloud.webmagic.vo.role.RoleQueryParamVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  前端控制器
@@ -82,6 +85,12 @@ public class SysRoleController {
         }else{
             result = Result.error("删除失败");
         }
+        return result;
+    }
+
+    @GetMapping("/getRoleGroup")
+    public Result<List<Map<String,String>>> getRoleGroup(){
+        Result<List<Map<String,String>>> result = Result.OK(iSysRoleService.getRoleGroup());
         return result;
     }
 
