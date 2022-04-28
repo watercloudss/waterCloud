@@ -51,10 +51,25 @@ public class SysRoleController {
     public Result updateDictByIdOrSave(@RequestBody RoleInputOutVo roleInputOutVo){
         SysRole sysRole = Convert.convert(SysRole.class,roleInputOutVo);
         Result result = null;
-        if(iSysRoleService.saveOrUpdate(sysRole)){
-            result = Result.OK();
+        if(roleInputOutVo.getId()==null){
+            QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("role_code",roleInputOutVo.getRoleCode());
+            SysRole sr = iSysRoleService.getOne(queryWrapper);
+            if(sr!=null){
+                result = Result.error("操作失败:角色已存在");
+            }else{
+                if(iSysRoleService.save(sysRole)){
+                    result = Result.OK();
+                }else{
+                    result = Result.error("操作失败");
+                }
+            }
         }else{
-            result = Result.error("操作失败");
+            if(iSysRoleService.updateById(sysRole)){
+                result = Result.OK();
+            }else{
+                result = Result.error("操作失败");
+            }
         }
         return result;
     }
