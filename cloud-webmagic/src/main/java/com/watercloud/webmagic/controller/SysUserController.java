@@ -196,6 +196,7 @@ public class SysUserController {
     @PutMapping("/updateOrSave")
     @Transactional
     public Result updateDictByIdOrSave(@RequestBody UserInputOutVo userInputOutVo){
+        Result result = null;
         SysUser sysUser = Convert.convert(SysUser.class,userInputOutVo);
         QueryWrapper<SysRole> qwsr = new QueryWrapper<>();
         qwsr.eq("role_code",userInputOutVo.getRoleCode());
@@ -210,6 +211,11 @@ public class SysUserController {
             urFlag = iSysUserRoleService.updateById(sysUserRole);
             uFlag = iSysUserService.updateById(sysUser);
         }else{
+            QueryWrapper<SysUser> suqw = new QueryWrapper<>();
+            suqw.eq("username",sysUser.getUsername());
+            if(iSysUserService.count()>0){
+                result = Result.error("操作失败:用户账号已存在！");
+            }
             sysUser.setPassword("8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92");
             uFlag = iSysUserService.save(sysUser);
             SysUserRole sysUserRole = new SysUserRole();
@@ -217,7 +223,6 @@ public class SysUserController {
             sysUserRole.setUserId(sysUser.getId());
             urFlag = iSysUserRoleService.save(sysUserRole);
         }
-        Result result = null;
         if(uFlag&&urFlag){
             result = Result.OK();
         }else{
