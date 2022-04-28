@@ -2,8 +2,10 @@ package com.watercloud.webmagic.config.shiro;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.watercloud.webmagic.common.util.RedisConstant;
 import com.watercloud.webmagic.common.util.RedisUtil;
 import com.watercloud.webmagic.config.shiro.jwt.JwtTool;
+import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.watercloud.webmagic.service.ISysRoleService;
@@ -36,6 +38,8 @@ public class ShiroRealm extends AuthorizingRealm {
     private ISysPermissionService iSysPermissionService;
     @Value("${JWTConfig.EXPIRE_TIME}")
     private long EXPIRE_TIME;
+    @Value("${ShiroConfig.redisExpire}")
+    private Integer redisExpire;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -59,14 +63,21 @@ public class ShiroRealm extends AuthorizingRealm {
         if(StrUtil.isBlank(username)){
             throw new AuthenticationException("token有错误！");
         }
-        // 从数据库获取对应用户名密码的用户
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username",username);
-        SysUser sysUser = iSysUserService.getOne(queryWrapper);
-        if (null == sysUser||sysUser.getStatus().equals("2")) {
-            throw new AuthenticationException("token不正确的！");
+        SysUser redisSysUser = (SysUser) redisUtil.get(RedisConstant.SYS_USERS+username);
+        if(redisSysUser==null){
+            // 从数据库获取对应用户名密码的用户
+            QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("username",username);
+            SysUser sysUser = iSysUserService.getOne(queryWrapper);
+            if (null == sysUser||sysUser.getStatus().equals("2")) {
+                throw new AuthenticationException("token不正确的！");
+            }else{
+                redisUtil.set(RedisConstant.SYS_USERS+sysUser.getUsername(),sysUser,redisExpire);
+                return new SimpleAuthenticationInfo(sysUser, token, "MyRealm");
+            }
+        }else{
+            return new SimpleAuthenticationInfo(redisSysUser, token, "MyRealm");
         }
-        return new SimpleAuthenticationInfo(sysUser, token, "MyRealm");
     }
 
     /*

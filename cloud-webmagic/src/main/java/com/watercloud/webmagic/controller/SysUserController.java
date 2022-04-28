@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloudwater.common.commonVo.Result;
 import com.watercloud.webmagic.common.aspect.annotation.AutoLogAnnotation;
 import com.watercloud.webmagic.common.util.CommonConstant;
+import com.watercloud.webmagic.common.util.RedisConstant;
 import com.watercloud.webmagic.common.util.RedisUtil;
 import com.watercloud.webmagic.config.shiro.jwt.JwtTool;
 import com.watercloud.webmagic.entity.SysDictType;
@@ -29,6 +30,8 @@ import com.watercloud.webmagic.vo.user.UserInfoVo;
 import com.watercloud.webmagic.vo.user.UserInputOutVo;
 import com.watercloud.webmagic.vo.user.UserQueryParamVo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,6 +59,8 @@ import java.util.Set;
 public class SysUserController {
     @Value("${JWTConfig.EXPIRE_TIME}")
     private long EXPIRE_TIME;
+    @Value("${ShiroConfig.redisExpire}")
+    private Integer redisExpire;
     @Autowired
     private ISysUserService iSysUserService;
     @Autowired
@@ -84,9 +89,10 @@ public class SysUserController {
             result.setMessage("用户名或密码错误！！！");
             result.setCode(CommonConstant.SC_NO_AUTHZ);
         }else{
-            if(password.equals( sysUser.getPassword())){
+            if(password.equals(sysUser.getPassword())){
                 String token = jwtTool.sign(username);
                 redisUtil.set(token,token,EXPIRE_TIME/1000);
+                redisUtil.set(RedisConstant.SYS_USERS +sysUser.getUsername(),sysUser,redisExpire);
                 JSONObject res = new JSONObject();
                 res.put("token", token);
                 result.setCode(CommonConstant.SC_OK_200);
@@ -112,9 +118,9 @@ public class SysUserController {
 
     @RequestMapping("/info")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
-//    @RequiresRoles({"user"})
 //    @RequiresPermissions("user:add")
-    public Result<UserInfoVo> info(String token){
+//    @RequiresRoles({"user"})
+    public Result<UserInfoVo> info(){
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         Set<String> roleSet = iSysRoleService.getUserRole(sysUser.getId());
         UserInfoVo userInfoVo = new UserInfoVo();
