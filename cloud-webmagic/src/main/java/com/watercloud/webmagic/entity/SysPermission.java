@@ -52,6 +52,8 @@ public class SysPermission implements Serializable {
 
     private String noCache;
 
+    private Integer sort;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 

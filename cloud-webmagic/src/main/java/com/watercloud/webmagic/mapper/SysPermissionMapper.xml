@@ -16,6 +16,7 @@
         <result column="roles" property="roles" />
         <result column="permission" property="permission" />
         <result column="noCache" property="noCache" />
+        <result column="sort" property="sort" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="create_by" property="createBy" />
@@ -65,5 +66,7 @@
             *
         FROM
             sp
+        ORDER BY
+	     sort
     </select>
 </mapper>
