@@ -34,6 +34,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     public Set<String> getUserPermission(Integer userId) {
         List<String> userPermissionList = sysPermissionMapper.getUserPermission(userId);
         Set<String> userPermissionSet = new HashSet<>(userPermissionList);
+        userPermissionSet.remove(null);
         return userPermissionSet;
     }
 
