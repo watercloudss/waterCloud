@@ -30,6 +30,7 @@ import com.watercloud.webmagic.vo.user.UserInfoVo;
 import com.watercloud.webmagic.vo.user.UserInputOutVo;
 import com.watercloud.webmagic.vo.user.UserQueryParamVo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -118,8 +119,6 @@ public class SysUserController {
 
     @RequestMapping("/info")
     @AutoLogAnnotation(logType=CommonConstant.LOG_TYPE_1)
-//    @RequiresPermissions("user:add")
-//    @RequiresRoles({"user"})
     public Result<UserInfoVo> info(){
         SysUser sysUser = (SysUser)SecurityUtils.getSubject().getPrincipal();
         Set<String> roleSet = iSysRoleService.getUserRole(sysUser.getId());
@@ -162,6 +161,8 @@ public class SysUserController {
     }
 
     @GetMapping("/list")
+    @RequiresPermissions("system:users:list")
+    //@RequiresRoles({"user"})
     public Result<IPage> list(UserQueryParamVo userQueryParamVo) {
         IPage iPage = new Page<>();
         iPage.setCurrent(userQueryParamVo.getPageNum());
@@ -185,6 +186,7 @@ public class SysUserController {
     }
 
     @GetMapping("/getById/{id}")
+    @RequiresPermissions("system:users:detail")
     public Result<RoleInputOutVo> getByDictCode(@PathVariable Integer id){
         QueryWrapper<SysUserRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",id);
@@ -200,6 +202,7 @@ public class SysUserController {
     }
 
     @PutMapping("/updateOrSave")
+    @RequiresPermissions(value={"system:users:add","system:users:update"},logical= Logical.OR)
     @Transactional
     public Result updateDictByIdOrSave(@RequestBody UserInputOutVo userInputOutVo){
         Result result = null;
@@ -238,6 +241,7 @@ public class SysUserController {
     }
 
     @DeleteMapping("/del/{id}")
+    @RequiresPermissions("system:users:delete")
     public Result  del(@PathVariable Integer id){
         SysUser sysUser = new SysUser();
         sysUser.setDelFlag(true);
