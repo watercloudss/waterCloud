@@ -30,6 +30,16 @@
             u.id = #{Integer}
     </select>
 
+    <select id="getUserRoleById" parameterType="Integer" resultType="com.watercloud.webmagic.entity.SysRole">
+        SELECT
+            r.*
+        FROM
+            sys_role r
+            INNER JOIN sys_user_role ur ON r.id = ur.role_id
+        WHERE
+	        ur.user_id = #{Integer}
+    </select>
+
     <select id="getRoleGroup" resultType="map">
             SELECT
                 role_code,

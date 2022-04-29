@@ -18,5 +18,6 @@ import java.util.Map;
 @Mapper
 public interface SysRoleMapper extends BaseMapper<SysRole> {
     public List<String> getUserRole(Integer userId);
+    public SysRole getUserRoleById(Integer userId);
     public List<Map<String,String>> getRoleGroup();
 }

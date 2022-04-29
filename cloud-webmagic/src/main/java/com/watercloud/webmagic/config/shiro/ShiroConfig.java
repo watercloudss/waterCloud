@@ -26,6 +26,8 @@ public class ShiroConfig {
     private String AnonUrls;
     @Value("${ShiroConfig.redisExpire}")
     private Integer redisExpire;
+    @Value("${redisShiro.address}")
+    private String redisShiro;
 
     @Bean
     public ShiroFilterFactoryBean factory(SecurityManager securityManager) {
@@ -121,6 +123,8 @@ public class ShiroConfig {
      */
     @Bean
     public IRedisManager redisManager() {
-        return new RedisManager();
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(redisShiro);
+        return redisManager;
     }
 }

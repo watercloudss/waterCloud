@@ -73,9 +73,11 @@ public class ShiroRealm extends AuthorizingRealm {
                 throw new AuthenticationException("token不正确的！");
             }else{
                 redisUtil.set(RedisConstant.SYS_USERS+sysUser.getUsername(),sysUser,redisExpire);
+                log.info("————身份认证方法完毕————");
                 return new SimpleAuthenticationInfo(sysUser, token, "MyRealm");
             }
         }else{
+            log.info("————身份认证方法完毕————");
             return new SimpleAuthenticationInfo(redisSysUser, token, "MyRealm");
         }
     }

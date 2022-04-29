@@ -3,7 +3,9 @@ package com.watercloud.webmagic.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.watercloud.webmagic.entity.SysPermission;
+import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.mapper.SysPermissionMapper;
+import com.watercloud.webmagic.mapper.SysRoleMapper;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.watercloud.webmagic.vo.menu.MenuVo;
@@ -25,6 +27,8 @@ import java.util.*;
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements ISysPermissionService {
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
 
     @Override
     public Set<String> getUserPermission(Integer userId) {
@@ -35,8 +39,12 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 
     @Override
     public List<MenuVo> getSysPermissionByUserId(Integer userId) {
-        List<SysPermission> sysPermissionsList = sysPermissionMapper.getSysPermissionByUserId(userId);
-        List<MenuVo> handleMenuList = handlePermission(sysPermissionsList,0);
+        List<MenuVo> handleMenuList = null;
+        SysRole sysRole = sysRoleMapper.getUserRoleById(userId);
+        if(sysRole!=null){
+            List<SysPermission> sysPermissionsList = sysPermissionMapper.getSysPermissionByRoleId(sysRole.getId());
+            handleMenuList = handlePermission(sysPermissionsList,0);
+        }
         return handleMenuList;
     }
 
@@ -63,12 +71,13 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         List<MenuVo> menuVoList = new ArrayList<>();
         if(!CollUtil.isEmpty(childrenList)){
             for(SysPermission sp:childrenList){
+                MenuVo mv = null;
                 if(!CollUtil.isEmpty(sp.getChildren())){
-                    recursionVo(sp);
+                    mv = recursionVo(sp);
                 }else{
-                    MenuVo mv = getMenuVo(sp);
-                    menuVoList.add(mv);
+                    mv = getMenuVo(sp);
                 }
+                menuVoList.add(mv);
             }
         }
         menuVo.setChildren(menuVoList);
