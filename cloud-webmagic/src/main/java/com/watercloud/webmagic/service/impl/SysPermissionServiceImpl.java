@@ -1,13 +1,20 @@
 package com.watercloud.webmagic.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.watercloud.webmagic.entity.SysPermission;
 import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.mapper.SysPermissionMapper;
 import com.watercloud.webmagic.mapper.SysRoleMapper;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.watercloud.webmagic.vo.menu.MenuInputOutVo;
+import com.watercloud.webmagic.vo.menu.MenuQueryParamVo;
 import com.watercloud.webmagic.vo.menu.MenuVo;
 import com.watercloud.webmagic.vo.menu.MetaVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +56,27 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         return handleMenuList;
     }
 
-    private List<MenuVo> handlePermission(List<SysPermission> sysPermissionsList,Integer parentId){
+    @Override
+    public IPage getList(MenuQueryParamVo menuQueryParamVo) {
+        IPage iPage = new Page<>();
+        iPage.setCurrent(menuQueryParamVo.getPageNum());
+        iPage.setSize(menuQueryParamVo.getPageSize());
+        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
+        if(StrUtil.isNotEmpty(menuQueryParamVo.getTitle()))
+            queryWrapper.eq("title",menuQueryParamVo.getTitle());
+        if(StrUtil.isNotEmpty(menuQueryParamVo.getBeginTime())&&StrUtil.isNotEmpty(menuQueryParamVo.getEndTime())) {
+            queryWrapper.between("create_time",menuQueryParamVo.getBeginTime()
+                    , DateUtil.format(DateUtil.offsetDay(DateUtil.parse(menuQueryParamVo.getEndTime()), 1), "yyyy-MM-dd")
+            );
+        }
+        queryWrapper.in("parent_id",0);
+        queryWrapper.orderByAsc("sort");
+        IPage page = this.page(iPage,queryWrapper);
+        page.setRecords(Convert.toList(MenuInputOutVo.class,page.getRecords()));
+        return page;
+    }
+
+    private List<MenuVo> handlePermission(List<SysPermission> sysPermissionsList, Integer parentId){
         List<SysPermission> spList = new ArrayList<>();
          for(int i=0; i<sysPermissionsList.size(); i++){
              SysPermission sysPermission = sysPermissionsList.get(i);
@@ -111,6 +138,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         MenuVo menuVo = new MenuVo();
         menuVo.setPath(sysPermission.getPath());
         menuVo.setAlwaysShow(StrUtil.isEmpty(sysPermission.getAlwaysshow())? null:"1".equals(sysPermission.getAlwaysshow())?true:false);
+        menuVo.setHidden(StrUtil.isEmpty(sysPermission.getHidden())? null:"1".equals(sysPermission.getHidden())?true:false);
         menuVo.setComponent(sysPermission.getComponent());
         menuVo.setName(sysPermission.getName());
         menuVo.setRedirect(sysPermission.getRedirect());

@@ -15,9 +15,10 @@
         <result column="icon" property="icon" />
         <result column="roles" property="roles" />
         <result column="permission" property="permission" />
-        <result column="noCache" property="noCache" />
+        <result column="no_cache" property="noCache" />
         <result column="sort" property="sort" />
         <result column="type" property="type" />
+        <result column="hidden" property="hidden" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="create_by" property="createBy" />
@@ -26,7 +27,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, parent_id, path, component, redirect, alwaysShow, name, title, icon, roles, permission, noCache, type, create_time, update_time, create_by, update_by
+        id, parent_id, path, component, redirect, alwaysShow, name, title, icon, roles, permission, no_cache, type, hidden, create_time, update_time, create_by, update_by
     </sql>
     <select id="getUserPermission" parameterType="Integer" resultType="String">
         SELECT

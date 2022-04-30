@@ -56,6 +56,8 @@ public class SysPermission implements Serializable {
 
     private String type;
 
+    private String hidden;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
@@ -68,6 +70,7 @@ public class SysPermission implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
+    @TableField(exist = false)
     private List<SysPermission> children;
 
 }

@@ -12,6 +12,7 @@ public class MenuVo {
     private String component;
     private String redirect;
     private Boolean alwaysShow;
+    private Boolean hidden;
     private String name;
     private MetaVo meta;
     private List<MenuVo> children;

@@ -1,16 +1,16 @@
 package com.watercloud.webmagic.controller;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cloudwater.common.commonVo.Result;
-import com.watercloud.webmagic.common.util.CommonConstant;
-import com.watercloud.webmagic.entity.SysPermission;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
+import com.watercloud.webmagic.vo.menu.MenuQueryParamVo;
 import com.watercloud.webmagic.vo.menu.MenuVo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -37,6 +37,14 @@ public class SysPermissionController {
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         List<MenuVo> menuVoList = iSysPermissionService.getSysPermissionByUserId(sysUser.getId());
         Result<List<MenuVo>> result = Result.OK(menuVoList);
+        return result;
+    }
+
+    @GetMapping("/list")
+    @RequiresPermissions("system:menu:list")
+    public Result<IPage> list(MenuQueryParamVo menuQueryParamVo){
+        IPage iPage = iSysPermissionService.getList(menuQueryParamVo);
+        Result<IPage> result = Result.OK(iPage);
         return result;
     }
 }
