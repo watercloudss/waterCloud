@@ -48,19 +48,21 @@ public class ShiroRealm extends AuthorizingRealm {
     /**
      * 获取身份验证信息
      * Shiro中，最终是通过 Realm 来获取应用程序中的用户、角色及权限信息的。
-     *
+     * 超时或错误的token会被gateway网关拦截，能够进来的都是有效的token
      * @param authenticationToken 用户身份信息 token
      * @return 返回封装了用户信息的 AuthenticationInfo 实例
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        log.info("————身份认证方法————");
         String token = (String)authenticationToken.getCredentials();
         String username = JwtTool.getTokenUsername(token);
+        log.info("++++++++++++身份认证方法开始++++++++++++:username{username},token{}",token);
         if(!refreshRedisToken(token,username)){
+            log.info("————————————身份认证方法完毕:token刷新失败！————————————:username{username},token{}",token);
             throw new AuthenticationException("认证过期，请登录认证!");
         }
         if(StrUtil.isBlank(username)){
+            log.info("————————————身份认证方法完毕：token有错误！————————————:username{username},token{}",token);
             throw new AuthenticationException("token有错误！");
         }
         SysUser redisSysUser = (SysUser) redisUtil.get(RedisConstant.SYS_USERS+username);
@@ -70,14 +72,15 @@ public class ShiroRealm extends AuthorizingRealm {
             queryWrapper.eq("username",username);
             SysUser sysUser = iSysUserService.getOne(queryWrapper);
             if (null == sysUser||sysUser.getStatus().equals("2")) {
+                log.info("————————————身份认证方法完毕：用户不存在！————————————:username{username},token{}",token);
                 throw new AuthenticationException("token不正确的！");
             }else{
                 redisUtil.set(RedisConstant.SYS_USERS+sysUser.getUsername(),sysUser,redisExpire);
-                log.info("————身份认证方法完毕————");
+                log.info("————身份认证方法完毕：成功认证！————:username{username},token{}",token);
                 return new SimpleAuthenticationInfo(sysUser, token, "MyRealm");
             }
         }else{
-            log.info("————身份认证方法完毕————");
+            log.info("————身份认证方法完毕：成功认证！————:username{username},token{}",token);
             return new SimpleAuthenticationInfo(redisSysUser, token, "MyRealm");
         }
     }
@@ -113,8 +116,8 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        log.info("————权限认证方法————");
         SysUser sysUser = (SysUser) principalCollection.getPrimaryPrincipal();
+        log.info("~~~~~~~~~~~~权限认证方法开始：~~~~~~~~~~~~username:{}",sysUser.getUsername());
         Integer userId = sysUser.getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
          //设置该用户拥有的角色
@@ -122,6 +125,7 @@ public class ShiroRealm extends AuthorizingRealm {
         info.setRoles(roleSet);
         Set<String> permissionSet = iSysPermissionService.getUserPermission(userId);
         info.setStringPermissions(permissionSet);
+        log.info("~~~~~~~~~~~~权限认证方法完毕：~~~~~~~~~~~~username:{}",sysUser.getUsername());
         return info;
     }
 
