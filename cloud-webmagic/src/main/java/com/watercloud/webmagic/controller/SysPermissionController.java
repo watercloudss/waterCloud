@@ -31,15 +31,7 @@ import java.util.List;
 public class SysPermissionController {
     @Autowired
     private ISysPermissionService iSysPermissionService;
-//    @PostMapping("/getRouters")
-//    public Result<JSONArray> getRouters(){
-//        Result<JSONArray> result = Result.OK();
-//        String str = "[{\"path\":\"/icon\",\"component\":\"Layout\",\"children\":[{\"path\":\"index\",\"component\":\"icons/index\",\"name\":\"Icons\",\"meta\":{\"title\":\"icons\",\"icon\":\"icon\",\"noCache\":true}}]}]";
-//        JSONArray res = (JSONArray) JSON.parse(str);
-//        result.setCode(CommonConstant.SC_OK_200);
-//        result.setData(res);
-//        return result;
-//    }
+
     @PostMapping("/getRouters")
     public Result<List<MenuVo>> getRouters(){
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();

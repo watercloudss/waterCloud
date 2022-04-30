@@ -15,6 +15,8 @@ import com.watercloud.webmagic.vo.dict.DictDataInputOutVo;
 import com.watercloud.webmagic.vo.dict.DictDataQueryParamVo;
 import com.watercloud.webmagic.vo.role.RoleInputOutVo;
 import com.watercloud.webmagic.vo.role.RoleQueryParamVo;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +38,7 @@ public class SysRoleController {
     private ISysRoleService iSysRoleService;
 
     @GetMapping("/list")
+    @RequiresPermissions("system:role:list")
     public Result<IPage> list(RoleQueryParamVo roleQueryParamVo) {
         IPage iPage = iSysRoleService.list(roleQueryParamVo);
         Result<IPage> result = Result.OK(iPage);
@@ -43,6 +46,7 @@ public class SysRoleController {
     }
 
     @GetMapping("/getById/{id}")
+    @RequiresPermissions("system:role:detail")
     public Result<RoleInputOutVo> getByDictCode(@PathVariable Integer id){
         SysRole sysRole = iSysRoleService.getById(id);
         RoleInputOutVo roleInputOutVo = Convert.convert(RoleInputOutVo.class,sysRole);
@@ -51,6 +55,7 @@ public class SysRoleController {
     }
 
     @PutMapping("/updateOrSave")
+    @RequiresPermissions(value={"system:role:add","system:role:update"},logical = Logical.OR)
     public Result updateDictByIdOrSave(@RequestBody RoleInputOutVo roleInputOutVo){
         SysRole sysRole = Convert.convert(SysRole.class,roleInputOutVo);
         Result result = null;
@@ -78,6 +83,7 @@ public class SysRoleController {
     }
 
     @DeleteMapping("/del/{id}")
+    @RequiresPermissions("system:role:delete")
     public Result  del(@PathVariable Integer id){
         Result result = null;
         if(iSysRoleService.removeById(id)){
@@ -89,6 +95,7 @@ public class SysRoleController {
     }
 
     @GetMapping("/getRoleGroup")
+    @RequiresPermissions(value={"system:role:group","system:users:add","system:users:update"},logical = Logical.OR)
     public Result<List<Map<String,String>>> getRoleGroup(){
         Result<List<Map<String,String>>> result = Result.OK(iSysRoleService.getRoleGroup());
         return result;
