@@ -1,7 +1,9 @@
 package com.watercloud.gateway.filter;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -16,13 +18,14 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
-
+@Slf4j
 @Component
 public class TokenFilter implements GlobalFilter, Ordered {
-    @Value("${loginPath}")
-    private String loginPath;
+    @Value("${UnCheckPath}")
+    private String UnCheckPath;
     @Autowired
     private JwtTool jwtTool;
 
@@ -34,13 +37,18 @@ public class TokenFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
        ServerHttpRequest serverHttpRequest = exchange.getRequest();
-       if(loginPath.trim().equals(serverHttpRequest.getPath().toString().trim())||"/webmagic/sys-user/logout".equals(serverHttpRequest.getPath().toString().trim())){
-           return chain.filter(exchange);
-        }
+       String requestUrl = serverHttpRequest.getPath().toString().trim();
+       log.info("请求路径：{}",requestUrl);
+       List anonUrls = Arrays.asList(UnCheckPath.split(","));
+       if(StrUtil.isNotEmpty(UnCheckPath)){
+           if(anonUrls.contains(requestUrl)){
+               return chain.filter(exchange);
+           }
+       }
        List<String> tokens = serverHttpRequest.getHeaders().get("token");
        if(CollUtil.isEmpty(tokens)){
            ServerHttpResponse response = exchange.getResponse();
-           DataBuffer buffer = response.bufferFactory().wrap(this.getResult("510","鉴权失败，无token！"));
+           DataBuffer buffer = response.bufferFactory().wrap(this.getResult("510","认证失败，无token！"));
            response.setStatusCode(HttpStatus.UNAUTHORIZED);
            response.getHeaders().add("Content-Type", "text/json;charset=UTF-8");
            return response.writeWith(Mono.just(buffer));
@@ -52,14 +60,14 @@ public class TokenFilter implements GlobalFilter, Ordered {
                    return chain.filter(exchange);
                }else{
                    ServerHttpResponse response = exchange.getResponse();
-                   DataBuffer buffer = response.bufferFactory().wrap(this.getResult("510", "鉴权失败，错误token！"));
+                   DataBuffer buffer = response.bufferFactory().wrap(this.getResult("510", "认证失败，错误token！"));
                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
                    response.getHeaders().add("Content-Type", "text/json;charset=UTF-8");
                    return response.writeWith(Mono.just(buffer));
                }
            } catch (Exception e) {
                ServerHttpResponse response = exchange.getResponse();
-               DataBuffer buffer = response.bufferFactory().wrap(this.getResult("510", "鉴权失败，错误token！"));
+               DataBuffer buffer = response.bufferFactory().wrap(this.getResult("510", "认证失败，错误token！"));
                response.setStatusCode(HttpStatus.UNAUTHORIZED);
                response.getHeaders().add("Content-Type", "text/json;charset=UTF-8");
                return response.writeWith(Mono.just(buffer));
@@ -69,10 +77,11 @@ public class TokenFilter implements GlobalFilter, Ordered {
 
     private byte[] getResult(String code,String msg){
         JSONObject message = new JSONObject();
-        message.put("success", "false");
+        message.put("success", false);
         message.put("code", code);
         message.put("message", msg);
         message.put("timestamp",System.currentTimeMillis());
+        message.put("data","");
         byte[] bits = message.toString().getBytes(StandardCharsets.UTF_8);
         return bits;
     }
