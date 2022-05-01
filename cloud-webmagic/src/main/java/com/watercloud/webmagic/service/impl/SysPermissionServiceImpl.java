@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.watercloud.webmagic.common.enums.SysPermissionEnum;
 import com.watercloud.webmagic.entity.SysPermission;
 import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.mapper.SysPermissionMapper;
@@ -78,6 +79,20 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         }
         queryWrapper.orderByAsc("sort");
         List<SysPermission> permissions = this.list(queryWrapper);
+        permissions.stream().forEach(e->{
+            if(SysPermissionEnum.M.getType().equals(e.getType())){
+                e.setType(SysPermissionEnum.M.getTypeName());
+            }else if(SysPermissionEnum.C.getType().equals(e.getType())){
+                e.setType(SysPermissionEnum.C.getTypeName());
+            }else{
+                e.setType(SysPermissionEnum.O.getTypeName());
+            }
+            if(StrUtil.isNotEmpty(e.getIcon())&&e.getIcon().contains("el-icon")){
+                e.setIsEl(true);
+            }else{
+                e.setIsEl(false);
+            }
+        });
         if(parentIdFlag){
             for(SysPermission s:permissions){
                 List<SysPermission> sList = handlePermission(permissions,s.getParentId());

@@ -73,4 +73,7 @@ public class SysPermission implements Serializable {
     @TableField(exist = false)
     private List<SysPermission> children;
 
+    @TableField(exist = false)
+    private Boolean isEl;
+
 }

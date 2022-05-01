@@ -39,6 +39,8 @@ public class MenuInputOutVo {
 
     private String hidden;
 
+    private Boolean isEl;
+
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
