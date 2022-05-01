@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -47,36 +48,51 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 
     @Override
     public List<MenuVo> getSysPermissionByUserId(Integer userId) {
-        List<MenuVo> handleMenuList = null;
         SysRole sysRole = sysRoleMapper.getUserRoleById(userId);
+        List<MenuVo> menuVoList = new ArrayList<>();
         if(sysRole!=null){
             List<SysPermission> sysPermissionsList = sysPermissionMapper.getSysPermissionByRoleId(sysRole.getId());
-            handleMenuList = handlePermission(sysPermissionsList,0);
+            List<SysPermission> handleMenuList = handlePermission(sysPermissionsList,0);
+            for(SysPermission sp:handleMenuList){
+                MenuVo menuVo = recursionVo(sp);
+                menuVoList.add(menuVo);
+            }
         }
-        return handleMenuList;
+        return menuVoList;
     }
 
     @Override
-    public IPage getList(MenuQueryParamVo menuQueryParamVo) {
-        IPage iPage = new Page<>();
-        iPage.setCurrent(menuQueryParamVo.getPageNum());
-        iPage.setSize(menuQueryParamVo.getPageSize());
+    public List<MenuInputOutVo> getList(MenuQueryParamVo menuQueryParamVo) {
+        boolean parentIdFlag = false;
+        List<SysPermission> handleMenuList = new ArrayList<>();
         QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
-        if(StrUtil.isNotEmpty(menuQueryParamVo.getTitle()))
-            queryWrapper.eq("title",menuQueryParamVo.getTitle());
+        if(StrUtil.isNotEmpty(menuQueryParamVo.getTitle())){
+            parentIdFlag = true;
+            queryWrapper.like("title",menuQueryParamVo.getTitle());
+        }
         if(StrUtil.isNotEmpty(menuQueryParamVo.getBeginTime())&&StrUtil.isNotEmpty(menuQueryParamVo.getEndTime())) {
+            parentIdFlag = true;
             queryWrapper.between("create_time",menuQueryParamVo.getBeginTime()
                     , DateUtil.format(DateUtil.offsetDay(DateUtil.parse(menuQueryParamVo.getEndTime()), 1), "yyyy-MM-dd")
             );
         }
-        queryWrapper.in("parent_id",0);
         queryWrapper.orderByAsc("sort");
-        IPage page = this.page(iPage,queryWrapper);
-        page.setRecords(Convert.toList(MenuInputOutVo.class,page.getRecords()));
-        return page;
+        List<SysPermission> permissions = this.list(queryWrapper);
+        if(parentIdFlag){
+            for(SysPermission s:permissions){
+                List<SysPermission> sList = handlePermission(permissions,s.getParentId());
+                if(this.isNotParent(permissions,s)){
+                    handleMenuList.addAll(sList);
+                }
+            }
+        }else{
+            handleMenuList = handlePermission(permissions,0);
+        }
+        List<MenuInputOutVo> menuInputOutVoList = Convert.toList(MenuInputOutVo.class,handleMenuList);
+        return menuInputOutVoList;
     }
 
-    private List<MenuVo> handlePermission(List<SysPermission> sysPermissionsList, Integer parentId){
+    private List<SysPermission> handlePermission(List<SysPermission> sysPermissionsList, Integer parentId){
         List<SysPermission> spList = new ArrayList<>();
          for(int i=0; i<sysPermissionsList.size(); i++){
              SysPermission sysPermission = sysPermissionsList.get(i);
@@ -85,12 +101,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                  spList.add(sysPermission);
              }
          }
-        List<MenuVo> menuVoList = new ArrayList<>();
-         for(SysPermission sp:spList){
-             MenuVo menuVo = recursionVo(sp);
-             menuVoList.add(menuVo);
-         }
-         return menuVoList;
+         return spList;
     }
 
     private MenuVo recursionVo(SysPermission sysPermissions){
@@ -132,6 +143,17 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
             }
         }
         return spList;
+    }
+
+    private boolean isNotParent(List<SysPermission> sysPermissionsList, SysPermission sysPermission){
+        boolean flag = true;
+        for(SysPermission sp:sysPermissionsList){
+            if(sp.getId() == sysPermission.getParentId()){
+                flag = false;
+                break;
+            }
+        }
+        return flag;
     }
 
     private MenuVo getMenuVo(SysPermission sysPermission){

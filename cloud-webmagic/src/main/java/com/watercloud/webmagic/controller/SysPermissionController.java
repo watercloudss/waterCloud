@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cloudwater.common.commonVo.Result;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
+import com.watercloud.webmagic.vo.menu.MenuInputOutVo;
 import com.watercloud.webmagic.vo.menu.MenuQueryParamVo;
 import com.watercloud.webmagic.vo.menu.MenuVo;
 import org.apache.shiro.SecurityUtils;
@@ -42,9 +43,9 @@ public class SysPermissionController {
 
     @GetMapping("/list")
     @RequiresPermissions("system:menu:list")
-    public Result<IPage> list(MenuQueryParamVo menuQueryParamVo){
-        IPage iPage = iSysPermissionService.getList(menuQueryParamVo);
-        Result<IPage> result = Result.OK(iPage);
+    public Result<List<MenuInputOutVo>> list(MenuQueryParamVo menuQueryParamVo){
+        List<MenuInputOutVo> menuInputOutVoList = iSysPermissionService.getList(menuQueryParamVo);
+        Result<List<MenuInputOutVo>> result = Result.OK(menuInputOutVoList);
         return result;
     }
 }
