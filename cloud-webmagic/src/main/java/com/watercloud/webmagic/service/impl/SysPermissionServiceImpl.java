@@ -93,7 +93,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
             if(SysPermissionStatusEnum.ON.getStatus().equals(e.getStatus())){
                 e.setStatus(SysPermissionStatusEnum.ON.getStatusName());
             }else{
-                e.setStatus(SysPermissionStatusEnum.OFF.getStatusName());;
+                e.setStatus(SysPermissionStatusEnum.OFF.getStatusName());
             }
         });
         if(parentIdFlag){
