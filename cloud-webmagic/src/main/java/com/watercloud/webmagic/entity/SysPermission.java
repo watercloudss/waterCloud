@@ -54,6 +54,8 @@ public class SysPermission implements Serializable {
 
     private Integer sort;
 
+    private String status;
+
     private String type;
 
     private String hidden;

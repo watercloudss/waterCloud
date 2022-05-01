@@ -39,6 +39,8 @@ public class MenuInputOutVo {
 
     private String hidden;
 
+    private String status;
+
     private Boolean isEl;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")

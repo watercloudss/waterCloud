@@ -5,9 +5,8 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.watercloud.webmagic.common.enums.SysPermissionEnum;
+import com.watercloud.webmagic.common.enums.SysPermissionStatusEnum;
+import com.watercloud.webmagic.common.enums.SysPermissionTypeEnum;
 import com.watercloud.webmagic.entity.SysPermission;
 import com.watercloud.webmagic.entity.SysRole;
 import com.watercloud.webmagic.mapper.SysPermissionMapper;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -80,17 +78,22 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         queryWrapper.orderByAsc("sort");
         List<SysPermission> permissions = this.list(queryWrapper);
         permissions.stream().forEach(e->{
-            if(SysPermissionEnum.M.getType().equals(e.getType())){
-                e.setType(SysPermissionEnum.M.getTypeName());
-            }else if(SysPermissionEnum.C.getType().equals(e.getType())){
-                e.setType(SysPermissionEnum.C.getTypeName());
+            if(SysPermissionTypeEnum.M.getType().equals(e.getType())){
+                e.setType(SysPermissionTypeEnum.M.getTypeName());
+            }else if(SysPermissionTypeEnum.C.getType().equals(e.getType())){
+                e.setType(SysPermissionTypeEnum.C.getTypeName());
             }else{
-                e.setType(SysPermissionEnum.O.getTypeName());
+                e.setType(SysPermissionTypeEnum.O.getTypeName());
             }
             if(StrUtil.isNotEmpty(e.getIcon())&&e.getIcon().contains("el-icon")){
                 e.setIsEl(true);
             }else{
                 e.setIsEl(false);
+            }
+            if(SysPermissionStatusEnum.ON.getStatus().equals(e.getStatus())){
+                e.setStatus(SysPermissionStatusEnum.ON.getStatusName());
+            }else{
+                e.setStatus(SysPermissionStatusEnum.OFF.getStatusName());;
             }
         });
         if(parentIdFlag){
