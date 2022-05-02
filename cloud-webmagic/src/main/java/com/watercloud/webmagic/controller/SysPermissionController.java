@@ -70,7 +70,7 @@ public class SysPermissionController {
         QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name",menuInputOutVo.getName()).or().eq("permission",menuInputOutVo.getPermission());
         Integer count = iSysPermissionService.count(queryWrapper);
-        if(count>0&&menuInputOutVo.getId()==0){
+        if(count>0&&(menuInputOutVo.getId()==null||menuInputOutVo.getId()==0)){
             return Result.error("操作失败，菜单编码/权限，已存在！");
         }
         if(menuInputOutVo.getParentId()==0){
