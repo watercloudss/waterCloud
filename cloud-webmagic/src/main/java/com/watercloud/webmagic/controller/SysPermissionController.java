@@ -67,19 +67,23 @@ public class SysPermissionController {
     @RequiresPermissions(value={"system:menu:add","system:menu:update"},logical= Logical.OR)
     @Transactional
     public Result updateOrSave(@RequestBody MenuInputOutVo menuInputOutVo){
-        SysPermission sysPermission = Convert.convert(SysPermission.class,menuInputOutVo);
+        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name",menuInputOutVo.getName()).or().eq("permission",menuInputOutVo.getPermission());
+        Integer count = iSysPermissionService.count(queryWrapper);
+        if(count>0&&menuInputOutVo.getId()==0){
+            return Result.error("操作失败，菜单编码/权限，已存在！");
+        }
         if(menuInputOutVo.getParentId()==0){
-            sysPermission.setComponent("Layout");
-            sysPermission.setPath("/"+sysPermission.getName());
+            menuInputOutVo.setComponent("Layout");
+            menuInputOutVo.setPath("/"+menuInputOutVo.getName());
         }else{
-            sysPermission.setPath(sysPermission.getName());
+            menuInputOutVo.setPath(menuInputOutVo.getName());
         }
         if(SysPermissionTypeEnum.M.getType().equals(menuInputOutVo.getType())&&menuInputOutVo.getParentId()!=0){
-            sysPermission.setComponent("ParentView");
+            menuInputOutVo.setComponent("ParentView");
         }
-        iSysPermissionService.saveOrUpdate(sysPermission);
-        Result result = Result.ok();
-        return result;
+        SysPermission sysPermission = Convert.convert(SysPermission.class,menuInputOutVo);
+        return iSysPermissionService.saveOrUpdate(sysPermission)?Result.ok():Result.error("操作失败!");
     }
 
     @GetMapping("/getById/{id}")
