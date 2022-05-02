@@ -204,7 +204,7 @@ public class SysUserController {
     @PutMapping("/updateOrSave")
     @RequiresPermissions(value={"system:users:add","system:users:update"},logical= Logical.OR)
     @Transactional
-    public Result updateDictByIdOrSave(@RequestBody UserInputOutVo userInputOutVo){
+    public Result updateOrSave(@RequestBody UserInputOutVo userInputOutVo){
         Result result = null;
         SysUser sysUser = Convert.convert(SysUser.class,userInputOutVo);
         QueryWrapper<SysRole> qwsr = new QueryWrapper<>();

@@ -13,10 +13,7 @@ import com.watercloud.webmagic.mapper.SysPermissionMapper;
 import com.watercloud.webmagic.mapper.SysRoleMapper;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.watercloud.webmagic.vo.menu.MenuInputOutVo;
-import com.watercloud.webmagic.vo.menu.MenuQueryParamVo;
-import com.watercloud.webmagic.vo.menu.MenuVo;
-import com.watercloud.webmagic.vo.menu.MetaVo;
+import com.watercloud.webmagic.vo.menu.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +29,7 @@ import java.util.*;
  */
 @Service
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements ISysPermissionService {
+    private final static List<String> types = Arrays.asList("M","C");
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
     @Autowired
@@ -61,6 +59,22 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
+    public List<MenuGroupVo> getGroup() {
+        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("type",types);
+        queryWrapper.orderByAsc("sort");
+        List<SysPermission> sysPermissionList = this.list(queryWrapper);
+        List<MenuGroupVo> mgList = handlePermissionGroup(sysPermissionList,0);
+        MenuGroupVo menuGroupVo = new MenuGroupVo();
+        menuGroupVo.setId(0);
+        menuGroupVo.setLabel("根目录");
+        menuGroupVo.setChildren(mgList);
+        List<MenuGroupVo> menuGroupVoList = new ArrayList<>();
+        menuGroupVoList.add(menuGroupVo);
+        return menuGroupVoList;
+    }
+
+    @Override
     public List<MenuInputOutVo> getList(MenuQueryParamVo menuQueryParamVo) {
         boolean parentIdFlag = false;
         List<SysPermission> handleMenuList = new ArrayList<>();
@@ -86,9 +100,11 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                 e.setType(SysPermissionTypeEnum.O.getTypeName());
             }
             if(StrUtil.isNotEmpty(e.getIcon())&&e.getIcon().contains("el-icon")){
-                e.setIsEl(true);
+                e.setIsEl("1");
+            }else if(StrUtil.isNotEmpty(e.getIcon())){
+                e.setIsEl("2");
             }else{
-                e.setIsEl(false);
+                e.setIsEl("3");
             }
             if(SysPermissionStatusEnum.ON.getStatus().equals(e.getStatus())){
                 e.setStatus(SysPermissionStatusEnum.ON.getStatusName());
@@ -149,7 +165,39 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                 recursion(sysPermissionsList,s);
             }
         }
+    }
 
+    private List<MenuGroupVo> handlePermissionGroup(List<SysPermission> sysPermissionsList, Integer parentId){
+        List<MenuGroupVo> mgList = new ArrayList<>();
+        for(int i=0; i<sysPermissionsList.size(); i++){
+            SysPermission sysPermission = sysPermissionsList.get(i);
+            if(sysPermission.getParentId() == parentId){
+                MenuGroupVo menuGroupVo = recursionGroup(sysPermissionsList, sysPermission);
+                mgList.add(menuGroupVo);
+            }
+        }
+        return mgList;
+    }
+
+    private MenuGroupVo recursionGroup(List<SysPermission> sysPermissionsList, SysPermission sysPermission){
+        MenuGroupVo menuGroupVo = new MenuGroupVo();
+        menuGroupVo.setId(sysPermission.getId());
+        menuGroupVo.setLabel(sysPermission.getTitle());
+        List<SysPermission> spList = getChildren(sysPermissionsList,sysPermission);
+        List<MenuGroupVo> menuGroupVoList = new ArrayList<>();
+        menuGroupVo.setChildren(menuGroupVoList);
+        for(SysPermission s:spList){
+            if(getChildren(sysPermissionsList,s).size()>0){
+                MenuGroupVo mgv = recursionGroup(sysPermissionsList,s);
+                menuGroupVoList.add(mgv);
+            }else{
+                MenuGroupVo mg = new MenuGroupVo();
+                mg.setId(s.getId());
+                mg.setLabel(s.getTitle());
+                menuGroupVoList.add(mg);
+            }
+        }
+        return menuGroupVo;
     }
 
     private List<SysPermission> getChildren(List<SysPermission> sysPermissionsList, SysPermission sysPermission){

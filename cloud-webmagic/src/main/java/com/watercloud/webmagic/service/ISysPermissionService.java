@@ -2,6 +2,7 @@ package com.watercloud.webmagic.service;
 
 import com.watercloud.webmagic.entity.SysPermission;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.watercloud.webmagic.vo.menu.MenuGroupVo;
 import com.watercloud.webmagic.vo.menu.MenuInputOutVo;
 import com.watercloud.webmagic.vo.menu.MenuQueryParamVo;
 import com.watercloud.webmagic.vo.menu.MenuVo;
@@ -21,4 +22,5 @@ public interface ISysPermissionService extends IService<SysPermission> {
     public Set<String> getUserPermission(Integer userId);
     public List<MenuVo> getSysPermissionByUserId(Integer userId);
     public List<MenuInputOutVo> getList(MenuQueryParamVo menuQueryParamVo);
+    public List<MenuGroupVo> getGroup();
 }
