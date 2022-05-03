@@ -44,6 +44,6 @@
 前端项目使用的是开源的element-admin，前端项目地址：[WebMagicBoard](https://github.com/watercloudss/WebMagicBoard "https://github.com/watercloudss/WebMagicBoard")
 
 运行起来的项目示例：
-<img src="https://raw.githubusercontent.com/flowingwaters/images/master/parkweb-img/072f0b96d1de188f7434880b697d178.PNG" width="650"/>
+<img src="https://github.com/watercloudss/images/blob/master/parkweb-img/072f0b96d1de188f7434880b697d178.png" width="650"/>
 <img src="https://raw.githubusercontent.com/flowingwaters/images/master/parkweb-img/d62f8d2e74544af2254a23e50ec8fc8.PNG" width="650"/>
 
