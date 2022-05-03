@@ -1,0 +1,684 @@
+{
+	"info": {
+		"_postman_id": "a27592b1-88f1-4011-83b9-b9584b127ded",
+		"name": "web Magic",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "登录",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"password\": \"cb362cfeefbf3d8d\",\r\n\t\"username\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9000/sys-user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"sys-user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取用户信息和角色",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMjU0NzUxLCJpYXQiOjE2NTEyNTI5NTEsInVzZXJuYW1lIjoiYWRtaW4ifQ.iilI0ygKIuoSMKTahSTo_bRfXVhBx0Y97q9NRdu-FA0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "123",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "pass",
+							"value": "123456",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "gender",
+							"value": "F",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-user/info",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-user",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjbG91ZC13ZWJtYWdpYyIsImV4cCI6MTYzMjA3MTM2OSwiaWF0IjoxNjMyMDY5NTY5LCJ1c2VybmFtZSI6ImplZWNnIn0.8iRnu6Q0jRjXOmk76O9wIKPC9SQvKonb9OmS0odOvkc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/sys-user/test1?username=123&password=123",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"sys-user",
+						"test1"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "123"
+						},
+						{
+							"key": "password",
+							"value": "123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9000/sys-user/notlogin",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"sys-user",
+						"notlogin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "注销",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjbG91ZC13ZWJtYWdpYyIsImV4cCI6MTYzMjE2MDY2MiwiaWF0IjoxNjMyMTU4ODYyLCJ1c2VybmFtZSI6ImFkbWluIn0.AS3xTn7h8SL_3rpaG4xanZtRLOiZG4PlU-NhXmTMDvw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/sys-user/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"sys-user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "退出登录",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:9000/sys-user/test2?username=123&password=",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"sys-user",
+						"test2"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "123"
+						},
+						{
+							"key": "password",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kafka",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjbG91ZC13ZWJtYWdpYyIsImV4cCI6MTY0MDIyNTg5MSwiaWF0IjoxNjQwMjI0MDkxLCJ1c2VybmFtZSI6ImFkbWluIn0.KoxWM1CqugLVW285qFwNR_zS9Bve4NW6qIH0t4Y2epY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9000/sys-log/lock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"sys-log",
+						"lock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "redisssion测试",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjbG91ZC13ZWJtYWdpYyIsImV4cCI6MTY0MDIyNTg5MSwiaWF0IjoxNjQwMjI0MDkxLCJ1c2VybmFtZSI6ImFkbWluIn0.KoxWM1CqugLVW285qFwNR_zS9Bve4NW6qIH0t4Y2epY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9000/sys-log/lock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"sys-log",
+						"lock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "获取登录人的菜单",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUwNjM4MDc0LCJpYXQiOjE2NTA2MzYyNzQsInVzZXJuYW1lIjoiYWRtaW4ifQ.BAP207GnLZoUsv2gpiLqoL6PCp5tm-LTBwxFPTkXhvk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-permission/getRouters",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-permission",
+						"getRouters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取字典列表",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUwODkzNzI5LCJpYXQiOjE2NTA4OTE5MjksInVzZXJuYW1lIjoiYWRtaW4ifQ.w0uyyZT0zPxKzdL1pLIH4zA6TU6mOL17nGTKc14yvxw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pageNum\":1,\r\n    \"pageSize\":10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-dict-type/list",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-dict-type",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "根据id获取字典",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "更新字典",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"createBy\": \"admin\",\r\n    \"createTime\": \"2022-03-29 18:26:51\",\r\n    \"dictId\": 1,\r\n    \"dictName\": \"用户性别\",\r\n    \"dictType\": \"sys_user_sex\",\r\n    \"remark\": \"用户性别列表\",\r\n    \"status\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取字典数据列表",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUwOTg4Nzc4LCJpYXQiOjE2NTA5ODY5NzgsInVzZXJuYW1lIjoiYWRtaW4ifQ.pp8sBOkRklaJUVxPFb5F59ObYokxJBJzatgbgY1Mjek",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-dict-data/list?pageNum=1&pageSize=5&name=男",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-dict-data",
+						"list"
+					],
+					"query": [
+						{
+							"key": "pageNum",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "name",
+							"value": "男"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取字典编码列表",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "更新字典数据",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMDQ3NTkxLCJpYXQiOjE2NTEwNDU3OTEsInVzZXJuYW1lIjoiYWRtaW4ifQ.f698TD374GRZThXjk7FEinFcYpJcza8xOG3A5e3Ztfc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-dict-type/getTypeGroup",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-dict-type",
+						"getTypeGroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "角色列表",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMDUyOTk1LCJpYXQiOjE2NTEwNTExOTUsInVzZXJuYW1lIjoiYWRtaW4ifQ.eGzO2PNWKwluNZ79ZzVwkG2BxZi35Fd8GCfStFx-oDg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-role/list?pageNum=1&pageSize=5",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-role",
+						"list"
+					],
+					"query": [
+						{
+							"key": "pageNum",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "角色详情",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "角色更新或新增",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMDUyOTk1LCJpYXQiOjE2NTEwNTExOTUsInVzZXJuYW1lIjoiYWRtaW4ifQ.eGzO2PNWKwluNZ79ZzVwkG2BxZi35Fd8GCfStFx-oDg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-role/updateOrSave",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-role",
+						"updateOrSave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "角色删除",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMDUyOTk1LCJpYXQiOjE2NTEwNTExOTUsInVzZXJuYW1lIjoiYWRtaW4ifQ.eGzO2PNWKwluNZ79ZzVwkG2BxZi35Fd8GCfStFx-oDg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-role/del/5",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-role",
+						"del",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "用户列表",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMDc4ODczLCJpYXQiOjE2NTEwNzcwNzMsInVzZXJuYW1lIjoiYWRtaW4ifQ.3GNP1KbHjGqt42WtX4pthEGwP0Bi0uXd-NNIWe4sb7E",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-user/list?pageNum=1&pageSize=5",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-user",
+						"list"
+					],
+					"query": [
+						{
+							"key": "pageNum",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "用户详情",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMDc4ODczLCJpYXQiOjE2NTEwNzcwNzMsInVzZXJuYW1lIjoiYWRtaW4ifQ.3GNP1KbHjGqt42WtX4pthEGwP0Bi0uXd-NNIWe4sb7E",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-user/getById/3",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-user",
+						"getById",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "用户删除",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxMDc4ODczLCJpYXQiOjE2NTEwNzcwNzMsInVzZXJuYW1lIjoiYWRtaW4ifQ.3GNP1KbHjGqt42WtX4pthEGwP0Bi0uXd-NNIWe4sb7E",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-user/del/3",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-user",
+						"del",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "菜单分组",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxNTg0NDMzLCJpYXQiOjE2NTE1ODI2MzMsInVzZXJuYW1lIjoiYWRtaW4ifQ.2g3426AXeDpLD6pD2ppfs_dgzKnu-2FYwUeaGs_GVaw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-permission/getGroup",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-permission",
+						"getGroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "菜单详情",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxNTg0NDMzLCJpYXQiOjE2NTE1ODI2MzMsInVzZXJuYW1lIjoiYWRtaW4ifQ.2g3426AXeDpLD6pD2ppfs_dgzKnu-2FYwUeaGs_GVaw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-permission/getById/2",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-permission",
+						"getById",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "菜单删除",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3YXRlcmNsb3VkIiwiZXhwIjoxNjUxNTEwNTA4LCJpYXQiOjE2NTE1MDg3MDgsInVzZXJuYW1lIjoiYWRtaW4ifQ.lsvhO2_0UD6YfFv7PDxICa8Y78Z-IMOIuei8hQRU_fk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/webmagic/sys-permission/del/129",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"webmagic",
+						"sys-permission",
+						"del",
+						"129"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
