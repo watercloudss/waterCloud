@@ -22,5 +22,5 @@ public interface ISysPermissionService extends IService<SysPermission> {
     public Set<String> getUserPermission(Integer userId);
     public List<MenuVo> getSysPermissionByUserId(Integer userId);
     public List<MenuInputOutVo> getList(MenuQueryParamVo menuQueryParamVo);
-    public List<MenuGroupVo> getGroup();
+    public List<MenuGroupVo> getGroup(Integer flag);
 }

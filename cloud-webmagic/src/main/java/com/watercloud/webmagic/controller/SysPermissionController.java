@@ -55,10 +55,10 @@ public class SysPermissionController {
         return result;
     }
 
-    @GetMapping("/getGroup")
+    @GetMapping("/getGroup/{flag}")
     @RequiresPermissions("system:menu:group")
-    public Result<List<MenuGroupVo>> getGroup(){
-        List<MenuGroupVo> menuGroups = iSysPermissionService.getGroup();
+    public Result<List<MenuGroupVo>> getGroup(@PathVariable Integer flag){
+        List<MenuGroupVo> menuGroups = iSysPermissionService.getGroup(flag);
         Result<List<MenuGroupVo>> result = Result.OK(menuGroups);
         return result;
     }

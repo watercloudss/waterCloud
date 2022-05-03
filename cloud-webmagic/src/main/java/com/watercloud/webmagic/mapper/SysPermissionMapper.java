@@ -3,6 +3,7 @@ package com.watercloud.webmagic.mapper;
 import com.watercloud.webmagic.entity.SysPermission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ import java.util.List;
 @Mapper
 public interface SysPermissionMapper extends BaseMapper<SysPermission> {
     public List<String> getUserPermission(Integer userId);
-    public List<SysPermission> getSysPermissionByRoleId(Integer roleId);
+    public List<SysPermission> getSysPermissionByRoleId(@Param("roleId")Integer roleId,@Param("flag") Integer flag);
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class RoleInputOutVo {
@@ -25,4 +26,6 @@ public class RoleInputOutVo {
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
+
+    private List<Integer> allkeys;
 }

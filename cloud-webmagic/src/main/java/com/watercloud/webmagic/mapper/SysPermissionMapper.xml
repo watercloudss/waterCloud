@@ -50,7 +50,12 @@
                     INNER JOIN sys_role_permission rp ON p.id = rp.permission_id
                 WHERE
                     rp.role_id = #{roleId}
-                    AND ( type = 'M' OR type = 'C' )
+                    <if test="flag != 1">
+                        AND ( type = 'M' OR type = 'C' )
+                    </if>
+                    <if test="flag != 0">
+                        AND ( type = 'M' OR type = 'C' OR type = 'O')
+                    </if>
                 ORDER BY
                     sort
     </select>

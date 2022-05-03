@@ -9,15 +9,19 @@ import com.watercloud.webmagic.common.enums.SysPermissionStatusEnum;
 import com.watercloud.webmagic.common.enums.SysPermissionTypeEnum;
 import com.watercloud.webmagic.entity.SysPermission;
 import com.watercloud.webmagic.entity.SysRole;
+import com.watercloud.webmagic.entity.SysRolePermission;
 import com.watercloud.webmagic.mapper.SysPermissionMapper;
 import com.watercloud.webmagic.mapper.SysRoleMapper;
 import com.watercloud.webmagic.service.ISysPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.watercloud.webmagic.service.ISysRolePermissionService;
+import com.watercloud.webmagic.service.ISysRoleService;
 import com.watercloud.webmagic.vo.menu.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -29,7 +33,8 @@ import java.util.*;
  */
 @Service
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements ISysPermissionService {
-    private final static List<String> types = Arrays.asList("M","C");
+    private final static List<String> mcTypes = Arrays.asList("M","C");
+    private final static List<String> allTypes = Arrays.asList("M","C","O");
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
     @Autowired
@@ -48,7 +53,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         SysRole sysRole = sysRoleMapper.getUserRoleById(userId);
         List<MenuVo> menuVoList = new ArrayList<>();
         if(sysRole!=null){
-            List<SysPermission> sysPermissionsList = sysPermissionMapper.getSysPermissionByRoleId(sysRole.getId());
+            List<SysPermission> sysPermissionsList = sysPermissionMapper.getSysPermissionByRoleId(sysRole.getId(),0);
             List<SysPermission> handleMenuList = handlePermission(sysPermissionsList,0);
             for(SysPermission sp:handleMenuList){
                 MenuVo menuVo = recursionVo(sp);
@@ -59,13 +64,17 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    public List<MenuGroupVo> getGroup() {
-        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("type",types);
-        queryWrapper.orderByAsc("sort");
-        List<SysPermission> sysPermissionList = this.list(queryWrapper);
-        List<MenuGroupVo> mgList = handlePermissionGroup(sysPermissionList,0);
+    public List<MenuGroupVo> getGroup(Integer flag) {
         MenuGroupVo menuGroupVo = new MenuGroupVo();
+        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
+        if(flag==1){
+            queryWrapper.in("type",mcTypes);
+        }else{
+            queryWrapper.in("type",allTypes);
+        }
+        queryWrapper.orderByAsc("sort");
+        List<SysPermission>  sysPermissionList = this.list(queryWrapper);
+        List<MenuGroupVo> mgList = handlePermissionGroup(sysPermissionList,0);
         menuGroupVo.setId(0);
         menuGroupVo.setLabel("根目录");
         menuGroupVo.setChildren(mgList);
