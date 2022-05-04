@@ -4,17 +4,17 @@ package com.watercloud.webmagic.controller;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cloudwater.common.commonVo.Result;
 import com.watercloud.webmagic.common.enums.SysPermissionTypeEnum;
 import com.watercloud.webmagic.entity.SysPermission;
+import com.watercloud.webmagic.entity.SysRolePermission;
 import com.watercloud.webmagic.entity.SysUser;
 import com.watercloud.webmagic.service.ISysPermissionService;
+import com.watercloud.webmagic.service.ISysRolePermissionService;
 import com.watercloud.webmagic.vo.menu.MenuGroupVo;
 import com.watercloud.webmagic.vo.menu.MenuInputOutVo;
 import com.watercloud.webmagic.vo.menu.MenuQueryParamVo;
 import com.watercloud.webmagic.vo.menu.MenuVo;
-import com.watercloud.webmagic.vo.user.UserInputOutVo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,6 +38,8 @@ import java.util.stream.Collectors;
 public class SysPermissionController {
     @Autowired
     private ISysPermissionService iSysPermissionService;
+    @Autowired
+    private ISysRolePermissionService iSysRolePermissionService;
 
     @PostMapping("/getRouters")
     public Result<List<MenuVo>> getRouters(){
@@ -82,6 +84,7 @@ public class SysPermissionController {
         if(SysPermissionTypeEnum.M.getType().equals(menuInputOutVo.getType())&&menuInputOutVo.getParentId()!=0){
             menuInputOutVo.setComponent("ParentView");
         }
+        menuInputOutVo.setAlwaysshow("1");
         SysPermission sysPermission = Convert.convert(SysPermission.class,menuInputOutVo);
         return iSysPermissionService.saveOrUpdate(sysPermission)?Result.ok():Result.error("操作失败!");
     }
@@ -102,13 +105,21 @@ public class SysPermissionController {
         QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("parent_id",id);
         List<SysPermission> sysPermissionList = iSysPermissionService.list(queryWrapper);
+        QueryWrapper<SysRolePermission> srpqw = new QueryWrapper<>();
+        srpqw.eq("permission_id",id);
+        List<SysRolePermission> sysRolePermissionList = iSysRolePermissionService.list(srpqw);
         boolean flag = true;
+        boolean rpflag = true;
         Result result = null;
         if(CollUtil.isNotEmpty(sysPermissionList)){
             List<Integer> ids = sysPermissionList.stream().map(SysPermission::getId).collect(Collectors.toList());
-            iSysPermissionService.removeByIds(ids);
+            flag = iSysPermissionService.removeByIds(ids);
         }
-        if(iSysPermissionService.removeById(id)&&flag){
+        if(CollUtil.isNotEmpty(sysRolePermissionList)){
+            List<Integer> ids = sysRolePermissionList.stream().map(SysRolePermission::getId).collect(Collectors.toList());
+            rpflag = iSysRolePermissionService.removeByIds(ids);
+        }
+        if(iSysPermissionService.removeById(id)&&flag&&rpflag){
             result = Result.ok();
         }else{
             result = Result.error("删除失败！");
