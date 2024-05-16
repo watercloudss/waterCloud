@@ -46,7 +46,7 @@
         <shiro-redis-version>3.1.0</shiro-redis-version>
         <hutool-version>5.7.9</hutool-version>
         <fastjson-version>1.2.38</fastjson-version>
-        <kafka-version>2.4.5.RELEASE</kafka-version>
+        <kafka-version>2.2.6.RELEASE</kafka-version>
         <redission-version>3.16.3</redission-version>
     </properties>
 
@@ -212,12 +212,12 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson-version}</version>
             </dependency>
-            <!-- kafka -->
+            <!-- kafka
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
                 <version>${kafka-version}</version>
-            </dependency>
+            </dependency>-->
             <!-- redission -->
             <dependency>
                 <groupId>org.redisson</groupId>
